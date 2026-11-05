@@ -7,7 +7,7 @@ import { UsersModule } from '../users/users.module.js';
 import { LoginLog, LoginLogSchema } from './schemas/login-log.schema.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { CloudinaryService } from '../../common/services/cloudinary/cloudinary.service.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
 
 @Module({

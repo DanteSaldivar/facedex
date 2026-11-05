@@ -3,9 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema.js';
 import { Comentario, ComentarioSchema } from './schemas/comentario.schema.js';
 import { PublicacionesController } from './publicaciones.controller.js';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
 import { PublicacionesService } from './services/publicaciones.service.js';
-
+import { CloudinaryService } from '../../common/services/cloudinary/cloudinary.service.js';
 
 @Module({
   imports: [

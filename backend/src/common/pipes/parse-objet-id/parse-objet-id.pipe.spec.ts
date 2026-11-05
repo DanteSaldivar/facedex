@@ -1,7 +1,8 @@
-import { ParseObjetIdPipe } from './parse-objet-id.pipe';
+import { describe, expect, it } from '@jest/globals';
+import { ParseObjectIdPipe } from './parse-objet-id.pipe.js';
 
 describe('ParseObjetIdPipe', () => {
   it('should be defined', () => {
-    expect(new ParseObjetIdPipe()).toBeDefined();
+    expect(new ParseObjectIdPipe()).toBeDefined();
   });
 });

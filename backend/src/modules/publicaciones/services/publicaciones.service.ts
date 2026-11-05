@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Publicacion, PublicacionDocument } from '../schemas/publicacion.schema.js';
 import { Comentario, ComentarioDocument } from '../schemas/comentario.schema.js';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { CloudinaryService } from '../../../common/services/cloudinary/cloudinary.service.js';
 import { CrearPublicacionDto } from '../dto/crear-publicaciones.dto.js';
 import { QueryPublicacionesDto } from '../dto/query-publicaciones.dto.js';
 
