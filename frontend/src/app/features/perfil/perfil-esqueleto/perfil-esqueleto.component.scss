@@ -1,0 +1,99 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.contenedor-pagina-manga {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.panel-viñeta-perfil {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 2rem 1.5rem;
+  box-shadow: 8px 8px 0px var(--ink);
+}
+
+.header-perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  border-bottom: 3px solid var(--ink);
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .badge-rol {
+    @include manga-panel;
+    background-color: var(--accent-2);
+    color: var(--ink);
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    padding: 0.1rem 0.5rem;
+    display: inline-block;
+  }
+
+  .nombre-completo {
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+    line-height: 1.1;
+    margin-top: 0.25rem;
+  }
+
+  .nombre-usuario {
+    font-family: var(--font-hand);
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+}
+
+.detalles-perfil-grilla {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .item-detalle {
+    @include manga-panel;
+    background-color: var(--paper-2);
+    padding: 0.85rem;
+
+    &.bloque-completo {
+      grid-column: 1 / -1;
+    }
+
+    .etiqueta-detalle {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      display: block;
+      color: var(--screentone);
+    }
+
+    .valor-detalle {
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .valor-biografia {
+      font-weight: 600;
+      margin-top: 0.35rem;
+    }
+  }
+}
+
+.tarjeta-proximamente {
+  @include manga-panel;
+  background-color: var(--paper-2);
+  padding: 1.25rem;
+  font-weight: 700;
+  border-left: 6px solid var(--accent);
+}

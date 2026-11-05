@@ -1,0 +1,28 @@
+@use '../../../../styles/mixin.scss' as *;
+.contenedor-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.icono-gogogo {
+  @include manga-panel;
+  background-color: var(--accent-2);
+  padding: 0.75rem 1.5rem;
+  animation: pulsoImpacto 0.6s ease-in-out infinite alternate;
+
+  .onomatopoeia-gogogo {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    color: var(--ink);
+    letter-spacing: 2px;
+  }
+}
+
+@keyframes pulsoImpacto {
+  from { transform: scale(0.95) rotate(-2deg); }
+  to { transform: scale(1.08) rotate(2deg); }
+}

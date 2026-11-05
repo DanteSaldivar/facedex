@@ -1,0 +1,53 @@
+@use '../../../../styles/mixin.scss' as *;
+.manga-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.manga-label {
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.manga-input {
+  @include manga-panel;
+  padding: 0.65rem 0.9rem;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: calc(var(--manga-shadow-offset) + 1px) calc(var(--manga-shadow-offset) + 1px) 0px var(--accent);
+  }
+
+  &.invalid {
+    border-color: var(--accent);
+    background-color: #FFF0F0;
+  }
+}
+
+.manga-error-bubble {
+  @include speech-bubble('left');
+  background-color: var(--accent);
+  color: #FFFFFF;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 0.4rem;
+  border-width: 2px;
+  box-shadow: 3px 3px 0px var(--ink);
+
+  &::before { border-color: var(--accent) transparent transparent transparent; }
+  &::after { border-color: var(--ink) transparent transparent transparent; }
+
+  .onomatopoeia-mini {
+    font-family: var(--font-title);
+    color: var(--accent-2);
+  }
+}

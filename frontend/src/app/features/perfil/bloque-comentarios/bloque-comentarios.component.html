@@ -1,0 +1,56 @@
+<div class="seccion-comentarios-manga">
+  <!-- Botón Desplegable -->
+  <button
+    type="button"
+    class="boton-desplegar-comentarios"
+    (click)="toggleDesplegar()"
+    [attr.aria-expanded]="desplegado()">
+    <span>💬 {{ desplegado() ? 'OCULTAR COMENTARIOS' : 'VER COMENTARIOS' }}</span>
+    <span class="badge-count">({{ totalComentariosInicial() }})</span>
+    <span class="flecha">{{ desplegado() ? '▲' : '▼' }}</span>
+  </button>
+
+  <!-- Bloque Desplegado -->
+  @if (desplegado()) {
+    <div class="contenedor-globos-comentarios">
+      @if (cargando()) {
+        <div class="cargando-comentarios">
+          <span class="onomatopoeia-mini">¡GOGOGO!</span> Cargando globos de diálogo...
+        </div>
+      } @else if (errorCarga()) {
+        <div class="error-comentarios">
+          ⚠️ {{ errorCarga() }}
+        </div>
+      } @else if (comentarios().length === 0) {
+        <div class="sin-comentarios">
+          <span>🗯️ Aún no hay comentarios en esta viñeta.</span>
+        </div>
+      } @else {
+        <div class="lista-globos">
+          @for (com of comentarios(); track com._id) {
+            <div class="item-comentario-globo">
+              <app-avatar
+                [imagenUrl]="com.autor.imagenPerfil"
+                [nombre]="com.autor.nombreUsuario"
+                [tamano]="34">
+              </app-avatar>
+
+              <div class="globo-dialogo-manga">
+                <div class="header-globo">
+                  <span class="autor-comentario">&#64;{{ com.autor.nombreUsuario }}</span>
+                  <div class="meta-comentario">
+                    @if (com.modificado) {
+                      <span class="badge-editado">(editado)</span>
+                    }
+                    <time class="fecha-comentario">{{ com.createdAt | tiempoTranscurrido }}</time>
+                  </div>
+                </div>
+                <p class="mensaje-globo">{{ com.mensaje }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

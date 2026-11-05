@@ -1,0 +1,70 @@
+@use "../../../styles/mixin.scss" as *;
+
+.contenedor-404 {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  @include screentone-bg;
+}
+
+.panel-manga-404 {
+  @include manga-panel;
+  background-color: var(--paper);
+  max-width: 520px;
+  width: 100%;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  box-shadow: 8px 8px 0px var(--ink);
+
+  .header-onomatopeya {
+    margin-bottom: 0.5rem;
+
+    .onomatopoeia-404 {
+      font-family: var(--font-title);
+      font-size: 3rem;
+      color: var(--accent);
+      -webkit-text-stroke: 2px var(--ink);
+      display: inline-block;
+      transform: rotate(-4deg);
+    }
+  }
+
+  .ilustracion-kuro-chan {
+    margin: 1rem 0;
+    animation: flotar 3s ease-in-out infinite;
+  }
+
+  .codigo-404 {
+    font-family: var(--font-title);
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: 2px;
+  }
+
+  .subtitulo-404 {
+    font-family: var(--font-hand);
+    font-size: 1.3rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .descripcion-404 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--ink);
+  }
+
+  .accion-404 {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}

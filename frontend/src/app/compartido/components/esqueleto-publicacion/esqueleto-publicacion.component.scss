@@ -1,0 +1,72 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.tarjeta-skeleton-manga {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 6px 6px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.screentone-pulse {
+  @include screentone-bg;
+  background-color: var(--paper-2);
+  border: 2px solid var(--ink);
+  animation: pulsoScreentone 1.2s ease-in-out infinite alternate;
+}
+
+.header-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .avatar-skeleton {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--manga-radius);
+  }
+
+  .meta-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+}
+
+.linea-skeleton {
+  height: 16px;
+  border-radius: var(--manga-radius);
+
+  &.mini { width: 30%; height: 12px; }
+  &.corta { width: 45%; }
+  &.mediana { width: 75%; }
+  &.larga { width: 95%; }
+}
+
+.caja-imagen-skeleton {
+  height: 200px;
+  width: 100%;
+}
+
+.footer-skeleton {
+  display: flex;
+  justify-content: space-between;
+  border-top: 2px solid var(--ink);
+  padding-top: 0.75rem;
+
+  .boton-skeleton {
+    height: 36px;
+    width: 100px;
+
+    &.corta { width: 70px; }
+  }
+}
+
+@keyframes pulsoScreentone {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}

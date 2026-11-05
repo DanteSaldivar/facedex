@@ -1,0 +1,22 @@
+<div class="manga-field-group">
+  @if (label()) {
+    <label class="manga-label">{{ label() }}</label>
+  }
+
+  <input
+    [type]="type()"
+    [value]="value"
+    [placeholder]="placeholder()"
+    [disabled]="disabled"
+    [class.invalid]="isInvalid()"
+    (input)="onInput($event)"
+    (blur)="onTouch()"
+    class="manga-input" />
+
+  <!-- Mini Globo de Diálogo de Error -->
+  @if (isInvalid() && errorMessage()) {
+    <div class="manga-error-bubble" role="alert">
+      <span class="onomatopoeia-mini">¡NOOO!</span> {{ errorMessage() }}
+    </div>
+  }
+</div>

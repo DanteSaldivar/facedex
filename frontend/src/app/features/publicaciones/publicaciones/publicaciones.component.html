@@ -1,0 +1,107 @@
+<div class="contenedor-feed-manga">
+  
+  <!-- Encabezado de la Sección con Controles -->
+  <header class="encabezado-feed">
+    <div class="titulo-zona">
+      <span class="onomatopoeia">¡CHAPTER 1!</span>
+      <h1 class="titulo-manga">FEED DE PUBLICACIONES</h1>
+    </div>
+
+    <div class="controles-feed">
+      <!-- Botón para abrir el Modal -->
+      <app-button
+        variant="primario"
+        size="md"
+        (onClick)="mostrarModalCrear.set(true)">
+        ¡NUEVA PUBLICACIÓN! ✍️
+      </app-button>
+
+      <div class="selector-zona">
+        <label for="selectorOrden" class="etiqueta-orden">ORDENAR:</label>
+        <select
+          id="selectorOrden"
+          class="select-manga"
+          [value]="ordenActual()"
+          (change)="alCambiarOrden($any($event.target).value)">
+          <option value="fecha">⏱️ Más Recientes</option>
+          <option value="likes">🔥 Más Populares</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Lista de Publicaciones o Skeleton Loaders -->
+  @if (cargando()) {
+    <div class="grilla-publicaciones">
+      @for (i of [1, 2, 3]; track i) {
+        <app-spinner></app-spinner>
+        <app-esqueleto-publicacion></app-esqueleto-publicacion>
+      }
+    </div>
+  } @else if (publicaciones().length === 0) {
+    <!-- Estado Vacío con Kuro-chan -->
+    <div class="estado-vacio-manga">
+      <div class="ilustracion-kuro-vacio">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="140" height="140">
+          <circle cx="80" cy="80" r="70" fill="#EDE8DC" stroke="#111111" stroke-width="4" />
+          <circle cx="80" cy="90" r="35" fill="#111111" />
+          <circle cx="80" cy="50" r="32" fill="#111111" />
+          <polygon points="50,30 40,5 65,22" fill="#111111" stroke="#111111" stroke-width="2" />
+          <polygon points="110,30 120,5 95,22" fill="#111111" stroke="#111111" stroke-width="2" />
+          <circle cx="68" cy="46" r="8" fill="#FAF7F0" />
+          <circle cx="92" cy="46" r="8" fill="#FAF7F0" />
+          <circle cx="68" cy="46" r="3" fill="#111111" />
+          <circle cx="92" cy="46" r="3" fill="#111111" />
+          <path d="M 72 62 Q 80 56 88 62" fill="none" stroke="#FAF7F0" stroke-width="3.5" stroke-linecap="round" />
+        </svg>
+      </div>
+      <span class="onomatopoeia ono-vacio">¡NANI?!</span>
+      <h2 class="titulo-vacio">¡TODAVÍA NO HAY PUBLICACIONES!</h2>
+      <p class="texto-vacio">Sé el primero en dibujar una nueva viñeta en la comunidad.</p>
+    </div>
+  } @else {
+    <!-- Grilla de Publicaciones -->
+    <div class="grilla-publicaciones">
+      @for (pub of publicaciones(); track pub._id) {
+        <app-publicacion
+          [publicacion]="pub"
+          [usuarioActual]="authService.usuarioActual()"
+          (eliminada)="alEliminarPublicacion($event)">
+        </app-publicacion>
+      }
+    </div>
+
+    <!-- Paginador Manga[cite: 3] -->
+    @if (totalPaginas() > 1) {
+      <nav class="paginador-manga" aria-label="Navegación de páginas">
+        <app-button
+          variant="secundario"
+          size="sm"
+          [disabled]="paginaActual() === 1"
+          (onClick)="irAPagina(paginaActual() - 1)">
+          ◄ ANTERIOR
+        </app-button>
+
+        <span class="info-pagina">
+          PÁGINA <strong class="num-pag">{{ paginaActual() }}</strong> DE {{ totalPaginas() }}
+        </span>
+
+        <app-button
+          variant="secundario"
+          size="sm"
+          [disabled]="paginaActual() === totalPaginas()"
+          (onClick)="irAPagina(paginaActual() + 1)">
+          SIGUIENTE ►
+        </app-button>
+      </nav>
+    }
+  }
+</div>
+
+<!-- Modal Flotante de Creación -->
+  @if (mostrarModalCrear()) {
+    <app-modal-crear-publicacion
+      (creada)="alCrearPublicacionExito()"
+      (cerrada)="mostrarModalCrear.set(false)">
+    </app-modal-crear-publicacion>
+  }

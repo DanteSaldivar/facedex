@@ -1,0 +1,42 @@
+<div class="contenedor-autenticacion">
+  <div class="panel-manga-login">
+    <div class="encabezado-tarjeta">
+      <span class="onomatopeya">¡DOKI DOKI!</span>
+      <h1 class="titulo-manga">INICIAR SESIÓN</h1>
+      <p class="subtitulo-manga">Ingresá a tu cuenta para ver el feed de manga</p>
+    </div>
+
+    <form [formGroup]="formularioLogin" (ngSubmit)="alEnviar()">
+      <app-input
+        label="Usuario o Correo Electrónico"
+        placeholder="Ej: kuro_san o kuro@manga.com"
+        formControlName="usuarioOCorreo"
+        [isInvalid]="esCampoInvalido('usuarioOCorreo')"
+        [errorMessage]="obtenerMensajeError('usuarioOCorreo')">
+      </app-input>
+
+      <app-input
+        label="Contraseña"
+        type="password"
+        placeholder="••••••••"
+        formControlName="contrasena"
+        [isInvalid]="esCampoInvalido('contrasena')"
+        [errorMessage]="obtenerMensajeError('contrasena')">
+      </app-input>
+
+      <div class="acciones-formulario">
+        <app-button type="submit" variant="primario" [block]="true" [disabled]="cargando()">
+          @if (cargando()) {
+            ¡ENTRANDO...!
+          } @else {
+            ¡INGRESAR! ➔
+          }
+        </app-button>
+      </div>
+    </form>
+
+    <div class="pie-tarjeta">
+      <p>¿Todavía no tenés cuenta? <a routerLink="/registro" class="enlace-manga">Registrate acá</a></p>
+    </div>
+  </div>
+</div>

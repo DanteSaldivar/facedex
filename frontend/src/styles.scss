@@ -1,0 +1,14 @@
+@use './styles/variables.scss';
+@use './styles/mixin.scss';
+@use './styles/typography.scss';
+@use './styles/reset.scss';
+.onomatopoeia {
+  font-family: var(--font-title);
+  color: var(--accent-2);
+  -webkit-text-stroke: 1.5px var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+  transform: rotate(-3deg);
+  user-select: none;
+}

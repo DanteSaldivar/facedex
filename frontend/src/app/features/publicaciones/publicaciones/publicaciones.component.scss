@@ -1,0 +1,115 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.contenedor-feed-manga {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+}
+
+.encabezado-feed {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 6px 6px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .titulo-zona {
+    .titulo-manga {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      line-height: 1;
+      color: var(--ink);
+    }
+  }
+
+  .controles-feed {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .etiqueta-orden {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      color: var(--ink);
+    }
+
+    .select-manga {
+      @include manga-panel;
+      padding: 0.45rem 0.85rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+    }
+  }
+}
+
+// Mobile en una columna, desktop puede distribuirse en grilla manga[cite: 3]
+.grilla-publicaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.estado-vacio-manga {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  box-shadow: 8px 8px 0px var(--ink);
+
+  .ilustracion-kuro-vacio {
+    margin-bottom: 1rem;
+  }
+
+  .ono-vacio {
+    font-size: 2.5rem;
+  }
+
+  .titulo-vacio {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    margin-top: 0.25rem;
+  }
+
+  .texto-vacio {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--screentone);
+    margin-top: 0.5rem;
+  }
+}
+
+.paginador-manga {
+  @include manga-panel;
+  background-color: var(--paper-2);
+  padding: 0.75rem 1.25rem;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .info-pagina {
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+
+    .num-pag {
+      color: var(--accent);
+    }
+  }
+}

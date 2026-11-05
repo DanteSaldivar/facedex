@@ -1,0 +1,63 @@
+<div class="contenedor-404">
+  <div class="panel-manga-404">
+    <div class="header-onomatopeya">
+      <span class="onomatopoeia-404">¡NANI?!</span>
+    </div>
+
+    <!-- Mascota Kuro-Chan dibujada en SVG puro con estilística manga -->
+    <div class="ilustracion-kuro-chan">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="180" height="180">
+        <!-- Sombra en suelo -->
+        <ellipse cx="100" cy="180" rx="60" ry="10" fill="#6C757D" opacity="0.4" />
+        
+        <!-- Cola de Kuro-chan -->
+        <path d="M 140 140 Q 180 120 170 80 Q 165 60 150 70" fill="none" stroke="#111111" stroke-width="8" stroke-linecap="round" />
+        
+        <!-- Cuerpo de gato de tinta -->
+        <ellipse cx="100" cy="135" rx="45" ry="40" fill="#111111" stroke="#111111" stroke-width="4" />
+        
+        <!-- Cabeza Chibi -->
+        <circle cx="100" cy="85" r="42" fill="#111111" />
+        
+        <!-- Oreja Izquierda -->
+        <polygon points="65,60 55,20 85,50" fill="#111111" stroke="#111111" stroke-width="3" />
+        <polygon points="68,56 60,28 82,48" fill="#D90429" />
+        
+        <!-- Oreja Derecha -->
+        <polygon points="135,60 145,20 115,50" fill="#111111" stroke="#111111" stroke-width="3" />
+        <polygon points="132,56 140,28 118,48" fill="#D90429" />
+
+        <!-- Ojos Grandes Manga (Confuso/Espiral) -->
+        <circle cx="83" cy="80" r="12" fill="#FAF7F0" stroke="#111111" stroke-width="2" />
+        <circle cx="117" cy="80" r="12" fill="#FAF7F0" stroke="#111111" stroke-width="2" />
+        <circle cx="83" cy="80" r="5" fill="#111111" />
+        <circle cx="117" cy="80" r="5" fill="#111111" />
+
+        <!-- Nariz y Bigotes -->
+        <polygon points="100,92 96,88 104,88" fill="#D90429" />
+        <path d="M 60 85 L 35 80 M 60 92 L 30 92 M 140 85 L 165 80 M 140 92 L 170 92" stroke="#FAF7F0" stroke-width="2.5" stroke-linecap="round" />
+
+        <!-- Boca confundida en zigzag -->
+        <path d="M 92 102 Q 96 106 100 102 Q 104 98 108 102" fill="none" stroke="#FAF7F0" stroke-width="3" stroke-linecap="round" />
+
+        <!-- Pluma G-Pen cruzada en la espalda -->
+        <path d="M 40 160 L 160 40" stroke="#FFC409" stroke-width="6" stroke-linecap="round" />
+        <path d="M 160 40 L 170 30 L 165 45 Z" fill="#111111" />
+      </svg>
+    </div>
+
+    <h1 class="codigo-404">ERROR 404</h1>
+    <h2 class="subtitulo-404">¡Esta viñeta no existe en el manga!</h2>
+    <p class="descripcion-404">
+      Kuro-chan buscó por todos los paneles, pero la página que estás buscando fue recortada o cambió de lugar.
+    </p>
+
+    <div class="accion-404">
+      <a routerLink="/publicaciones">
+        <app-button variant="primario" size="lg">
+          ¡VOLVER AL FEED! 🏠
+        </app-button>
+      </a>
+    </div>
+  </div>
+</div>

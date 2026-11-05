@@ -1,0 +1,81 @@
+@if (authService.estaLogueado()) {
+<nav class="navbar-manga">
+  <div class="contenedor-navbar">
+
+    <!-- Logo facedex -->
+    <a routerLink="/publicaciones" class="logo-enlace" aria-label="faceDex Inicio">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 50" width="180" height="40" aria-label="faceDex Logo">
+    <defs>
+      <filter id="logo-shadow" x="0" y="0" width="120%" height="120%">
+        <feDropShadow dx="3" dy="3" stdDeviation="0" flood-color="#111111" />
+      </filter>
+    </defs>
+    <polygon points="5,4 235,0 225,46 0,46" fill="#D90429" stroke="#111111" stroke-width="3" stroke-linejoin="miter" filter="url(#logo-shadow)" />
+    <polygon points="10,8 228,4 220,42 6,42" fill="#FAF7F0" stroke="#111111" stroke-width="2" />
+    <text x="16" y="32" font-family="'Bangers', cursive, impact, sans-serif" font-size="28" fill="#111111" letter-spacing="1">
+      face<tspan fill="#D90429">DEX</tspan>
+    </text>
+    <polygon points="195,10 200,18 208,19 202,25 204,33 195,28 186,33 188,25 182,19 190,18" fill="#FFC409" stroke="#111111" stroke-width="2" />
+  </svg>
+</a>
+
+    <!-- Menú Desktop -->
+    <div class="enlaces-desktop">
+      <a routerLink="/publicaciones" routerLinkActive="activo" class="item-nav">
+        📖 PUBLICACIONES
+      </a>
+      <a routerLink="/perfil" routerLinkActive="activo" class="item-nav">
+        👤 MI PERFIL
+      </a>
+
+      @if (authService.esAdmin()) {
+      <span class="badge-admin">ADMIN</span>
+      }
+    </div>
+
+    <!-- Acciones de Usuario -->
+    <div class="acciones-desktop">
+      <!-- Botón Modo Tinta / Oscuro -->
+      <button (click)="toggleModoOscuro()" class="boton-modo-tinta" aria-label="Cambiar tema">
+        {{ modoOscuro() ? '☀️ PAPEL' : '🌙 TINTA' }}
+      </button>
+
+      <!-- Avatar de Usuario -->
+      <a routerLink="/perfil" title="Ir a mi perfil">
+        <app-avatar [imagenUrl]="authService.usuarioActual()?.imagenPerfil"
+          [nombre]="authService.usuarioActual()?.nombreUsuario || 'Usuario'" [tamano]="38">
+        </app-avatar>
+      </a>
+
+      <!-- Botón Salir -->
+      <button (click)="confirmarCierreSesion()" class="boton-salir" aria-label="Cerrar sesión">
+        🚪 SALIR
+      </button>
+    </div>
+
+    <!-- Botón Menú Hamburguesa Mobile -->
+    <button (click)="toggleMenu()" class="boton-hamburguesa" aria-label="Abrir menú de navegación">
+      {{ menuAbierto() ? '✖' : '☰' }}
+    </button>
+  </div>
+
+  <!-- Menú Desplegable Mobile -->
+  @if (menuAbierto()) {
+  <div class="menu-desplegable-mobile">
+    <a routerLink="/publicaciones" (click)="toggleMenu()" class="item-mobile">
+      📖 PUBLICACIONES
+    </a>
+    <a routerLink="/perfil" (click)="toggleMenu()" class="item-mobile">
+      👤 MI PERFIL
+    </a>
+    <div class="divisor-mobile"></div>
+    <button (click)="toggleModoOscuro()" class="boton-mobile">
+      {{ modoOscuro() ? '☀️ MODO PAPEL' : '🌙 MODO TINTA' }}
+    </button>
+    <button (click)="confirmarCierreSesion(); toggleMenu()" class="boton-mobile peligro">
+      🚪 CERRAR SESIÓN
+    </button>
+  </div>
+  }
+</nav>
+}

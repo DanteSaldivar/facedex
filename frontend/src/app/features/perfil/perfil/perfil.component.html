@@ -1,0 +1,82 @@
+<div class="contenedor-perfil-manga">
+  <div class="panel-tarjeta-perfil">
+    
+    @if (usuario) {
+      <!-- Encabezado con datos del Usuario -->
+      <header class="header-perfil">
+        <app-avatar
+          [imagenUrl]="usuario.imagenPerfil"
+          [nombre]="usuario.nombreUsuario"
+          [tamano]="100">
+        </app-avatar>
+
+        <div class="info-usuario-principal">
+          <span class="badge-rol">{{ usuario.perfil | uppercase }}</span>
+          <h1 class="nombre-completo">{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+          <h2 class="nombre-usuario">&#64;{{ usuario.nombreUsuario }}</h2>
+        </div>
+      </header>
+
+      <!-- Grilla con datos detallados -->
+      <div class="grilla-datos-perfil">
+        <div class="item-dato">
+          <span class="etiqueta-dato">📧 CORREO ELECTRÓNICO</span>
+          <span class="valor-dato">{{ usuario.correo }}</span>
+        </div>
+
+        <div class="item-dato">
+          <span class="etiqueta-dato">🎂 FECHA DE NACIMIENTO</span>
+          <span class="valor-dato">{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="item-dato bloque-biografia">
+          <span class="etiqueta-dato">📝 BIOGRAFÍA / DESCRIPCIÓN</span>
+          <p class="texto-biografia">
+            {{ usuario.descripcion || 'Sin biografía especificada aún.' }}
+          </p>
+        </div>
+      </div>
+    }
+
+    <!-- Sección de Mis Últimas 3 Publicaciones -->
+    <section class="seccion-ultimas-posts">
+      <div class="titulo-seccion-posts">
+        <span class="onomatopoeia">¡MY CHAPTERS!</span>
+        <h2 class="subtitulo-manga">MIS ÚLTIMAS 3 PUBLICACIONES</h2>
+      </div>
+
+      @if (cargandoPublicaciones()) {
+        <div class="grilla-posts-perfil">
+          @for (i of [1, 2]; track i) {
+            <app-publicacion-esqueleto></app-publicacion-esqueleto>
+          }
+        </div>
+      } @else if (ultimasPublicaciones().length === 0) {
+        <div class="sin-posts-perfil">
+          <span class="onomatopoeia-mini">¡ZUUN!</span>
+          <p>Todavía no realizaste ninguna publicación.</p>
+        </div>
+      } @else {
+        <div class="grilla-posts-perfil">
+          @for (pub of ultimasPublicaciones(); track pub._id) {
+            <app-publicacion
+              [publicacion]="pub"
+              [usuarioActual]="usuario"
+              (eliminada)="alEliminarPublicacion($event)">
+              
+              <!-- Proyección del Bloque de Comentarios Colapsables -->
+              <div slot="comentarios">
+                <app-bloque-comentarios
+                  [publicacionId]="pub._id"
+                  [totalComentariosInicial]="pub.comentariosCount">
+                </app-bloque-comentarios>
+              </div>
+
+            </app-publicacion>
+          }
+        </div>
+      }
+    </section>
+
+  </div>
+</div>

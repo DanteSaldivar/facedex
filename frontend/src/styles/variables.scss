@@ -1,0 +1,40 @@
+// Paleta de colores - Modo Claro (Default)
+:root {
+  --ink: #111111;
+  --paper: #FAF7F0;
+  --paper-2: #EDE8DC;
+  --screentone: #6C757D;
+  --accent: #D90429;
+  --accent-2: #FFC409;
+  --success: #1B4D3E;
+
+  // Variables de borde y sombra manga
+  --manga-border-width: 3px;
+  --manga-shadow-offset: 5px;
+  --manga-radius: 2px; // Esquinas casi rectas tipo imprenta
+
+  // Fuentes
+  --font-title: 'Bangers', cursive, impact, sans-serif;
+  --font-body: 'Nunito', sans-serif;
+  --font-hand: 'Permanent Marker', cursive, sans-serif;
+}
+
+// Modo Oscuro (Ink Mode)
+body.dark-theme {
+  --ink: #FAF7F0;
+  --paper: #121212;
+  --paper-2: #1E1E1E;
+  --screentone: #4A4A4A;
+  --accent: #FF4D6D;
+  --accent-2: #FFD60A;
+  --success: #2A9D5C;
+}
+
+.onomatopoeia {
+  font-family: var(--font-title);
+  color: var(--accent-2);
+  // El texto amarillo lleva obligatoriamente un trazo sólido negro tinta (--ink)
+  -webkit-text-stroke: 1.5px var(--ink);
+  text-shadow: 2px 2px 0px var(--ink);
+  letter-spacing: 1px;
+}

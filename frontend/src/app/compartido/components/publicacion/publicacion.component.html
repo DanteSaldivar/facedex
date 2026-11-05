@@ -1,0 +1,70 @@
+@if (pub) {
+  <article class="tarjeta-viñeta-manga">
+    
+    <!-- Header de la Viñeta -->
+    <header class="header-viñeta">
+      <div class="autor-info">
+        <app-avatar
+          [imagenUrl]="pub.autor.imagenPerfil"
+          [nombre]="pub.autor.nombreUsuario"
+          [tamano]="42">
+        </app-avatar>
+        <div class="datos-autor">
+          <span class="nombre-usuario">&#64;{{ pub.autor.nombreUsuario }}</span>
+          <time class="fecha-relativa" [attr.datetime]="pub.createdAt">
+            ⏱️ {{ pub.createdAt | tiempoTranscurrido }}
+          </time>
+        </div>
+      </div>
+
+      <!-- Botón de Eliminar: Visible ÚNICAMENTE si es propia o admin -->
+      @if (esPropiaOAdmin()) {
+        <button
+          type="button"
+          class="boton-eliminar-manga"
+          [disabled]="procesandoEliminacion()"
+          (click)="alConfirmarEliminar()"
+          aria-label="Eliminar publicación"
+          title="Eliminar publicación">
+          🗑️
+        </button>
+      }
+    </header>
+
+    <!-- Título y Mensaje -->
+    <h2 class="titulo-publicacion">{{ pub.titulo }}</h2>
+    <p class="mensaje-publicacion">{{ pub.mensaje }}</p>
+
+    <!-- Imagen Opcional (se oculta si es null/undefined) -->
+    @if (pub.imagenUrl) {
+      <div class="marco-imagen-manga">
+        <img [src]="pub.imagenUrl" [alt]="pub.titulo" class="imagen-post" loading="lazy" />
+      </div>
+    }
+
+    <!-- Footer de Reacciones -->
+    <footer class="footer-viñeta">
+      <button
+        type="button"
+        class="boton-like-manga"
+        [class.doki-activo]="pub.meGusta"
+        [disabled]="procesandoLike()"
+        [attr.aria-pressed]="pub.meGusta"
+        [attr.aria-label]="pub.meGusta ? 'Quitar me gusta' : 'Dar me gusta'"
+        (click)="alAlternarLike()">
+        <span class="onomatopoeia-doki" [class.efecto-impacto]="pub.meGusta">
+          {{ pub.meGusta ? '¡DOKI! ❤️' : '🤍 LIKE' }}
+        </span>
+        <span class="contador-likes">{{ pub.likesCount }}</span>
+      </button>
+
+      <div class="indicador-comentarios" aria-label="Cantidad de comentarios">
+        <span class="icono-comentario">💬</span>
+        <span class="contador-comentarios">{{ pub.comentariosCount }}</span>
+      </div>
+    </footer>
+
+    <!-- Proyección para Comentarios -->
+    <ng-content select="[slot=comentarios]"></ng-content>
+  </article>
+}

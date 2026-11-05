@@ -1,0 +1,46 @@
+<div class="contenedor-pagina-manga">
+  <div class="panel-viñeta-perfil">
+    
+    @if (usuario) {
+      <div class="header-perfil">
+        <app-avatar
+          [imagenUrl]="usuario.imagenPerfil"
+          [nombre]="usuario.nombreUsuario"
+          [tamano]="100">
+        </app-avatar>
+
+        <div class="info-perfil-principal">
+          <span class="badge-rol">{{ usuario.perfil | uppercase }}</span>
+          <h1 class="nombre-completo">{{ usuario.nombre }} {{ usuario.apellido }}</h1>
+          <h2 class="nombre-usuario">&#64;{{ usuario.nombreUsuario }}</h2>
+        </div>
+      </div>
+
+      <div class="detalles-perfil-grilla">
+        <div class="item-detalle">
+          <span class="etiqueta-detalle">📧 CORREO:</span>
+          <span class="valor-detalle">{{ usuario.correo }}</span>
+        </div>
+
+        <div class="item-detalle">
+          <span class="etiqueta-detalle">🎂 FECHA NACIMIENTO:</span>
+          <span class="valor-detalle">{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="item-detalle bloque-completo">
+          <span class="etiqueta-detalle">📝 BIOGRAFÍA:</span>
+          <p class="valor-biografia">
+            {{ usuario.descripcion || 'Sin biografía especificada aún.' }}
+          </p>
+        </div>
+      </div>
+    }
+
+    <div class="tarjeta-proximamente">
+      <p class="texto-aviso">
+        📌 <strong>PRÓXIMAMENTE EN EL SPRINT 2:</strong> Listado con mis últimas 3 publicaciones y sus comentarios asociados[cite: 3].
+      </p>
+    </div>
+
+  </div>
+</div>

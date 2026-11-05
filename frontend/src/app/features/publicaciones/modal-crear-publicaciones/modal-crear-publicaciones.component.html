@@ -1,0 +1,107 @@
+<div class="manga-modal-backdrop" (click)="cerrarModal()">
+  <div
+    class="manga-modal-box modal-crear"
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-crear-manga">
+    
+    <!-- Encabezado con Onomatopeya BAM -->
+    <div class="modal-header">
+      <span class="onomatopoeia header-ono">¡BAM!</span>
+      <h2 id="titulo-crear-manga" class="modal-title">NUEVA PUBLICACIÓN</h2>
+      <button type="button" class="btn-cerrar-x" (click)="cerrarModal()" aria-label="Cerrar modal">✖</button>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="formulario" (ngSubmit)="alEnviar()" class="modal-body">
+      
+      <!-- Título de la Publicación -->
+      <app-input
+        label="Título de la Viñeta (Máx. 100 caracteres)"
+        placeholder="Ej: ¡Un nuevo capítulo comienza!"
+        formControlName="titulo"
+        [isInvalid]="esCampoInvalido('titulo')"
+        [errorMessage]="obtenerMensajeError('titulo')">
+      </app-input>
+
+      <!-- Mensaje / Historia -->
+      <div class="campo-textarea-manga">
+        <div class="header-label-textarea">
+          <label class="etiqueta-manga">Mensaje / Contenido</label>
+          <span class="contador-caracteres" [class.limite-cercano]="caracteresRestantes() < 50">
+            {{ caracteresRestantes() }} restantes
+          </span>
+        </div>
+        <textarea
+          formControlName="mensaje"
+          placeholder="Escribí lo que está pasando en este panel de tu vida..."
+          rows="4"
+          maxLength="500"
+          (input)="onMensajeInput($event)"
+          class="textarea-manga"
+          [class.invalid]="esCampoInvalido('mensaje')"></textarea>
+
+        @if (esCampoInvalido('mensaje')) {
+          <div class="manga-error-bubble" role="alert">
+            <span class="onomatopoeia-mini">¡NOOO!</span> {{ obtenerMensajeError('mensaje') }}
+          </div>
+        }
+      </div>
+
+      <!-- Carga Opcional de Imagen -->
+      <div class="seccion-imagen-manga">
+        <label class="etiqueta-manga">Imagen de la Viñeta (Opcional - Máx. 5 MB)</label>
+        
+        @if (vistaPreviaImagen()) {
+          <div class="contenedor-vista-previa">
+            <img [src]="vistaPreviaImagen()" alt="Vista previa de publicación" class="img-preview" />
+            <button type="button" class="btn-quitar-imagen" (click)="quitarImagen()" title="Quitar imagen">
+              🗑️ Eliminar Imagen
+            </button>
+          </div>
+        } @else {
+          <div class="selector-archivo-caja">
+            <label for="imagenPost" class="boton-subir-imagen">
+              📷 ¡ELEGIR ILUSTRACIÓN!
+            </label>
+            <input
+              id="imagenPost"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              (change)="alSeleccionarImagen($event)"
+              class="input-oculto" />
+          </div>
+        }
+
+        @if (errorArchivo()) {
+          <div class="manga-error-bubble" role="alert">
+            <span class="onomatopoeia-mini">¡NOOO!</span> {{ errorArchivo() }}
+          </div>
+        }
+      </div>
+
+      <!-- Acciones del Modal -->
+      <div class="modal-actions">
+        <app-button
+          type="button"
+          variant="secundario"
+          (onClick)="cerrarModal()">
+          CANCELAR
+        </app-button>
+
+        <app-button
+          type="submit"
+          variant="primario"
+          [disabled]="cargando()">
+          @if (cargando()) {
+            ¡PUBLICANDO...!
+          } @else {
+            ¡DIBUJAR VIÑETA! ✍️
+          }
+        </app-button>
+      </div>
+
+    </form>
+  </div>
+</div>

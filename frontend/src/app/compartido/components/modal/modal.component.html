@@ -1,0 +1,43 @@
+@if (servicioModal.estaAbierto()) {
+  <div class="manga-modal-backdrop" (click)="cancelar()">
+    <div
+      #modalContainer
+      class="manga-modal-box"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="'titulo-modal-manga'"
+      [attr.aria-describedby]="'descripcion-modal-manga'">
+      
+      <!-- Encabezado con Onomatopeya -->
+      <div class="modal-header">
+        <span class="onomatopoeia header-ono">
+          {{ modal?.onomatopeya || (modal?.tipo === 'error' ? '¡NOOO!' : modal?.tipo === 'exito' ? '¡SUGOI!' : '¡BAAM!') }}
+        </span>
+        <h2 id="titulo-modal-manga" class="modal-title">{{ modal?.titulo }}</h2>
+      </div>
+
+      <!-- Cuerpo del Mensaje -->
+      <div class="modal-body">
+        <p id="descripcion-modal-manga">{{ modal?.mensaje }}</p>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="modal-actions">
+        @if (modal?.tipo === 'confirmacion' || modal?.tipo === 'sesion') {
+          <app-button
+            variant="secundario"
+            (onClick)="cancelar()">
+            {{ modal?.textoCancelar }}
+          </app-button>
+        }
+
+        <app-button
+          [variante]="modal?.tipo === 'error' ? 'danger' : 'primary'"
+          (onClick)="confirmar()">
+          {{ modal?.textoConfirmar }}
+        </app-button>
+      </div>
+    </div>
+  </div>
+}

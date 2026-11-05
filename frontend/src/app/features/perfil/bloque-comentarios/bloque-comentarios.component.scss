@@ -1,0 +1,106 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.seccion-comentarios-manga {
+  margin-top: 0.75rem;
+  border-top: 2px dashed var(--ink);
+  padding-top: 0.75rem;
+}
+
+.boton-desplegar-comentarios {
+  @include manga-panel;
+  @include manga-button-hover;
+  background-color: var(--paper-2);
+  color: var(--ink);
+  width: 100%;
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .badge-count {
+    color: var(--accent);
+    font-weight: 900;
+  }
+}
+
+.contenedor-globos-comentarios {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cargando-comentarios, .sin-comentarios, .error-comentarios {
+  @include manga-panel;
+  background-color: var(--paper-2);
+  padding: 0.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.error-comentarios {
+  background-color: #FFF0F0;
+  color: var(--accent);
+}
+
+.lista-globos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.item-comentario-globo {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+
+  .globo-dialogo-manga {
+    @include speech-bubble('left');
+    background-color: var(--paper-2);
+    padding: 0.65rem 0.85rem;
+    flex: 1;
+
+    .header-globo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.25rem;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 0.25rem;
+
+      .autor-comentario {
+        font-family: var(--font-title);
+        font-size: 1rem;
+        color: var(--ink);
+      }
+
+      .meta-comentario {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+
+        .badge-editado {
+          font-family: var(--font-hand);
+          font-size: 0.75rem;
+          color: var(--accent);
+        }
+
+        .fecha-comentario {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--screentone);
+        }
+      }
+    }
+
+    .mensaje-globo {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+  }
+}

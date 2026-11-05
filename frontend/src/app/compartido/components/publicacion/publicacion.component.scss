@@ -1,0 +1,165 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.tarjeta-viñeta-manga {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 6px 6px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  position: relative;
+}
+
+.header-viñeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px dashed var(--ink);
+  padding-bottom: 0.65rem;
+
+  .autor-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .datos-autor {
+      display: flex;
+      flex-direction: column;
+
+      .nombre-usuario {
+        font-family: var(--font-title);
+        font-size: 1.15rem;
+        color: var(--ink);
+        line-height: 1.1;
+      }
+
+      .fecha-relativa {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--screentone);
+      }
+    }
+  }
+
+  .boton-eliminar-manga {
+    @include manga-panel;
+    @include manga-button-hover;
+    background-color: var(--accent);
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+.titulo-publicacion {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
+
+.mensaje-publicacion {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.marco-imagen-manga {
+  @include manga-panel;
+  padding: 0;
+  overflow: hidden;
+  max-height: 420px;
+  background-color: var(--paper-2);
+
+  .imagen-post {
+    width: 100%;
+    height: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.footer-viñeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px solid var(--ink);
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+
+  .boton-like-manga {
+    @include manga-panel;
+    @include manga-button-hover;
+    background-color: var(--paper-2);
+    color: var(--ink);
+    padding: 0.4rem 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+
+    &.doki-activo {
+      background-color: var(--accent);
+      color: #ffffff;
+
+      .onomatopoeia-doki {
+        font-family: var(--font-title);
+        color: var(--accent-2);
+        -webkit-text-stroke: 1px var(--ink);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .onomatopoeia-doki {
+      font-family: var(--font-title);
+      font-size: 1.15rem;
+      letter-spacing: 1px;
+
+      &.efecto-impacto {
+        animation: latidoDoki 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+    }
+
+    .contador-likes {
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+  }
+
+  .indicador-comentarios {
+    @include manga-panel;
+    background-color: var(--paper-2);
+    padding: 0.4rem 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 900;
+    font-size: 1.05rem;
+  }
+}
+
+@keyframes latidoDoki {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}

@@ -1,0 +1,9 @@
+<div class="marco-avatar-manga" [style.width.px]="tamano()" [style.height.px]="tamano()">
+      @if (imagenUrl()) {
+        <img [src]="imagenUrl()" [alt]="'Avatar de ' + nombre()" class="imagen-avatar" />
+      } @else {
+        <div class="iniciales-avatar">
+          {{ iniciales() }}
+        </div>
+      }
+    </div>

@@ -1,0 +1,54 @@
+@mixin manga-panel {
+  background-color: var(--paper);
+  border: var(--manga-border-width) solid var(--ink);
+  box-shadow: var(--manga-shadow-offset) var(--manga-shadow-offset) 0px var(--ink);
+  border-radius: var(--manga-radius);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+@mixin manga-button-hover {
+  &:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: calc(var(--manga-shadow-offset) + 2px) calc(var(--manga-shadow-offset) + 2px) 0px var(--ink);
+  }
+  &:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px var(--ink);
+  }
+}
+
+// Trama Screentone (Halftone de puntos en CSS)
+@mixin screentone-bg {
+  background-image: radial-gradient(var(--screentone) 15%, transparent 16%);
+  background-size: 8px 8px;
+}
+
+// Globo de diálogo estilo manga
+@mixin speech-bubble($tail-position: 'left') {
+  position: relative;
+  @include manga-panel;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    @if $tail-position == 'left' { left: 20px; } @else { right: 20px; }
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 14px 12px 0 0;
+    border-color: var(--ink) transparent transparent transparent;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    @if $tail-position == 'left' { left: 22px; } @else { right: 22px; }
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 8px 0 0;
+    border-color: var(--paper) transparent transparent transparent;
+    z-index: 1;
+  }
+}

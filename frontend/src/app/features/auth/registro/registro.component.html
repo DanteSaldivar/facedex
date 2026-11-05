@@ -1,0 +1,155 @@
+<div class="contenedor-autenticacion">
+  <div class="panel-manga-registro">
+    
+    <!-- Encabezado de la Tarjeta -->
+    <header class="encabezado-tarjeta">
+      <span class="onomatopoeia">¡START!</span>
+      <h1 class="titulo-manga">CREAR CUENTA EN faceDEX</h1>
+      <p class="subtitulo-manga">Sumate a la comunidad</p>
+    </header>
+
+    <!-- Formulario -->
+    <form [formGroup]="formularioRegistro" (ngSubmit)="alEnviar()">
+
+      <!-- Selector y Vista Previa de Foto de Perfil Manga -->
+      <div class="seccion-foto-perfil">
+        <div class="marco-avatar-manga">
+          @if (vistaPreviaFoto()) {
+            <img [src]="vistaPreviaFoto()" alt="Vista previa de perfil" class="imagen-avatar" />
+          } @else {
+            <span class="avatar-placeholder">👤</span>
+          }
+        </div>
+
+        <input
+          id="inputFotoPerfil"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="alSeleccionarFoto($event)"
+          class="input-oculto" />
+
+        @if (vistaPreviaFoto()) {
+          <button type="button" class="boton-archivo-manga" (click)="quitarFoto()">
+            🗑️ Eliminar Foto
+          </button>
+        } @else {
+          <label for="inputFotoPerfil" class="boton-archivo-manga">
+            📷 Elegir Foto de Perfil
+          </label>
+        }
+
+        @if (errorArchivo()) {
+          <div class="manga-error-bubble" role="alert">
+            <span class="onomatopoeia-mini">¡NOOO!</span> {{ errorArchivo() }}
+          </div>
+        }
+      </div>
+      
+      <!-- Grilla Dos Columnas: Nombre y Apellido -->
+      <div class="grilla-dos-columnas">
+        <app-input
+          label="Nombre"
+          placeholder="Ej: Dante"
+          formControlName="nombre"
+          [isInvalid]="esCampoInvalido('nombre')"
+          [errorMessage]="obtenerMensajeError('nombre')">
+        </app-input>
+
+        <app-input
+          label="Apellido"
+          placeholder="Ej: Saldivar"
+          formControlName="apellido"
+          [isInvalid]="esCampoInvalido('apellido')"
+          [errorMessage]="obtenerMensajeError('apellido')">
+        </app-input>
+      </div>
+
+      <!-- Nombre de Usuario y Correo -->
+      <app-input
+        label="Nombre de Usuario (Máx 20 caracteres)"
+        placeholder="Ej: dante_saldivar"
+        formControlName="nombreUsuario"
+        [isInvalid]="esCampoInvalido('nombreUsuario')"
+        [errorMessage]="obtenerMensajeError('nombreUsuario')">
+      </app-input>
+
+      <app-input
+        label="Correo Electrónico"
+        type="email"
+        placeholder="correo@ejemplo.com"
+        formControlName="correo"
+        [isInvalid]="esCampoInvalido('correo')"
+        [errorMessage]="obtenerMensajeError('correo')">
+      </app-input>
+
+      <!-- Grilla Dos Columnas: Contraseñas -->
+      <div class="grilla-dos-columnas">
+        <app-input
+          label="Contraseña ( 1 mayus, 1 numero)"
+          type="password"
+          placeholder="••••••••"
+          formControlName="password"
+          [isInvalid]="esCampoInvalido('password')"
+          [errorMessage]="obtenerMensajeError('password')">
+        </app-input>
+
+        <app-input
+          label="Repetir Contraseña "
+          type="password"
+          placeholder="••••••••"
+          formControlName="repetirPassword"
+          [isInvalid]="esCampoInvalido('repetirPassword')"
+          [errorMessage]="obtenerMensajeError('repetirPassword')">
+        </app-input>
+      </div>
+
+      <!-- Fecha de Nacimiento -->
+      <app-input
+        label="Fecha de Nacimiento"
+        type="date"
+        formControlName="fechaNacimiento"
+        [isInvalid]="esCampoInvalido('fechaNacimiento')"
+        [errorMessage]="obtenerMensajeError('fechaNacimiento')">
+      </app-input>
+
+      <!-- Biografía Opcional -->
+      <div class="campo-textarea-manga">
+        <label class="etiqueta-manga">Biografía / Descripción</label>
+        <textarea
+          formControlName="descripcion"
+          placeholder="Contanos algo sobre vos..."
+          rows="3"
+          class="textarea-manga"
+          [class.invalid]="esCampoInvalido('descripcion')"></textarea>
+        @if (esCampoInvalido('descripcion')) {
+          <div class="manga-error-bubble" role="alert">
+            <span class="onomatopoeia-mini">¡NOOO!</span> {{ obtenerMensajeError('descripcion') }}
+          </div>
+        }
+      </div>
+
+      <!-- Botón de Envío -->
+      <div class="acciones-manga">
+        <app-button
+          type="submit"
+          variant="primario"
+          [disabled]="cargando()">
+          @if (cargando()) {
+            ¡CREANDO CUENTA...!
+            <app-spinner></app-spinner>
+          } @else {
+            ¡UNIRSE A LA AVENTURA! 🚀
+          }
+        </app-button>
+      </div>
+
+    </form>
+
+    <!-- Pie de Tarjeta -->
+    <footer class="pie-tarjeta">
+      <span>¿Ya tenés cuenta en faceDEX? </span>
+      <a routerLink="/login" class="enlace-manga">¡Iniciar Sesión!</a>
+    </footer>
+
+  </div>
+</div>
