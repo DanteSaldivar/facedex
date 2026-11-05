@@ -3,12 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { UsersService } from '../users/users.service.js';
+import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { LoginLog, LoginLogDocument } from './schemas/login-log.schema.js';
+import { RegistroDto } from './dto/registro.dto.js';
+import { LoginDto } from './dto/login.dto.js';
 
-import { UsersService } from '../users/users.service';
-import { RegistroDto } from './dto/registro.dto';
-import { LoginDto } from './dto/login.dto';
-import { LoginLog, LoginLogDocument } from './schemas/login-log.schema';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
+
 
 @Injectable()
 export class AuthService {

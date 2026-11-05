@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFile, HttpCode, HttpStatus, } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard.js';
+import { PublicacionesService } from './services/publicaciones.service.js';
+import { CrearPublicacionDto } from './dto/crear-publicaciones.dto.js';
+import { UsuarioActual } from 'src/common/decoradores/usuario-actual.decorator.js';
+import { QueryPublicacionesDto } from './dto/query-publicaciones.dto.js';
+import { ParseObjectIdPipe } from 'src/common/pipes/parse-objet-id/parse-objet-id.pipe.js';
 
-import { QueryPublicacionesDto } from './dto/query-publicaciones.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { PublicacionesService } from './services/publicaciones.service';
-import { UsuarioActual } from 'src/common/decoradores/usuario-actual.decorator';
-import { CrearPublicacionDto } from './dto/crear-publicaciones.dto';
-import { ParseObjectIdPipe } from 'src/common/pipes/parse-objet-id/parse-objet-id.pipe';
+
 
 
 @Controller('publicaciones')

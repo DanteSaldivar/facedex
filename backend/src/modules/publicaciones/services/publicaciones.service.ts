@@ -6,11 +6,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Publicacion, PublicacionDocument } from '../schemas/publicacion.schema';
-import { Comentario, ComentarioDocument, } from '../schemas/comentario.schema';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
-import { CrearPublicacionDto } from '../dto/crear-publicaciones.dto';
-import { QueryPublicacionesDto } from '../dto/query-publicaciones.dto';
+import { Publicacion, PublicacionDocument } from '../schemas/publicacion.schema.js';
+import { Comentario, ComentarioDocument } from '../schemas/comentario.schema.js';
+import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { CrearPublicacionDto } from '../dto/crear-publicaciones.dto.js';
+import { QueryPublicacionesDto } from '../dto/query-publicaciones.dto.js';
+
 
 @Injectable()
 export class PublicacionesService {

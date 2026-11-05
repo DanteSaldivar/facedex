@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CloudinaryService } from './common/services/cloudinary/cloudinary.service';
-import { UsersModule } from './modules/users/users.module';
-
-import { AuthModule } from './modules/auth/auth.module';
-import { PublicacionesModule } from './modules/publicaciones/publicaciones.module';
+import { UsersModule } from './modules/users/users.module.js';
+import { PublicacionesModule } from './modules/publicaciones/publicaciones.module.js';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { CloudinaryService } from './common/services/cloudinary/cloudinary.service.js';
 
 
 @Module({

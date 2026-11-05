@@ -3,13 +3,12 @@ import { JwtModule, JwtSignOptions } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UsersModule } from '../users/users.module';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { LoginLog, LoginLogSchema } from './schemas/login-log.schema';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
+import { UsersModule } from '../users/users.module.js';
+import { LoginLog, LoginLogSchema } from './schemas/login-log.schema.js';
+import { AuthController } from './auth.controller.js';
+import { AuthService } from './auth.service.js';
+import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { JwtStrategy } from './strategies/jwt.strategy.js';
 
 @Module({
   imports: [

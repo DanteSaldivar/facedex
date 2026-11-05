@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema';
-import { Comentario, ComentarioSchema } from './schemas/comentario.schema';
-import { PublicacionesController } from './publicaciones.controller';
-import { PublicacionesService } from './services/publicaciones.service';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
+import { Publicacion, PublicacionSchema } from './schemas/publicacion.schema.js';
+import { Comentario, ComentarioSchema } from './schemas/comentario.schema.js';
+import { PublicacionesController } from './publicaciones.controller.js';
+import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service.js';
+import { PublicacionesService } from './services/publicaciones.service.js';
 
 
 @Module({
