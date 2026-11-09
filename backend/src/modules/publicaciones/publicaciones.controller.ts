@@ -34,6 +34,14 @@ export class PublicacionesController {
         return this.publicacionesService.listar(queryDto, usuarioId);
     }
 
+    @Get(':id')
+    async obtenerPorId(
+        @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
+        @UsuarioActual('id') usuarioId: string,
+    ) {
+        return this.publicacionesService.obtenerPorId(id, usuarioId);
+    }
+
     @Delete(':id')
     async darBajaLogica(
         @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
@@ -41,6 +49,8 @@ export class PublicacionesController {
     ) {
         return this.publicacionesService.darBajaLogica(id, usuario);
     }
+
+
 
     @Post(':id/like')
     @HttpCode(HttpStatus.CREATED)
@@ -59,16 +69,4 @@ export class PublicacionesController {
         return this.publicacionesService.quitarLike(id, usuarioId);
     }
 
-    @Get(':id/comentarios')
-    async listarComentarios(
-        @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
-        @Query('offset') offset?: number,
-        @Query('limit') limit?: number,
-    ) {
-        return this.publicacionesService.obtenerComentariosEsqueleto(
-            id,
-            Number(offset) || 0,
-            Number(limit) || 10,
-        );
-    }
 }

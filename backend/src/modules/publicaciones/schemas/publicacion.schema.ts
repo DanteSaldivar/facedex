@@ -27,17 +27,6 @@ export class Publicacion {
 
   @Prop({ type: Boolean, default: true })
   activa?: boolean;
-
-  @Prop([{ type: Types.ObjectId, ref: 'User' }])
-  guardadoPor?: Types.ObjectId[];
-
-  @Prop([
-    {
-      usuario: { type: Types.ObjectId, ref: 'User' },
-      fecha: { type: Date, default: Date.now },
-    },
-  ])
-  compartidos?: Array<{ usuario: Types.ObjectId; fecha: Date }>;
 }
 
 export const PublicacionSchema = SchemaFactory.createForClass(Publicacion);

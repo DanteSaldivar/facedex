@@ -14,7 +14,7 @@ import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.ser
 @Module({
   imports: [
     UsersModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     MongooseModule.forFeature([{ name: LoginLog.name, schema: LoginLogSchema }]),
     JwtModule.registerAsync({
       imports: [ConfigModule],

@@ -1,0 +1,4 @@
+export const AUTH_COOKIE_NAME = 'facedex_token';
+export const JWT_EXPIRES_IN_MINUTES = 15;
+export const JWT_EXPIRES_IN_SECONDS = JWT_EXPIRES_IN_MINUTES * 60;
+export const JWT_EXPIRES_IN_MS = JWT_EXPIRES_IN_SECONDS * 1000;

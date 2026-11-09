@@ -1,0 +1,11 @@
+{
+  "remoteName": "origin",
+  "projects": [
+    {
+      "id": "prj_JfVGRKG3jKyi5F2ehZstxYXQQ1ty",
+      "name": "facedex-api",
+      "directory": "backend",
+      "orgId": "team_yRrTxemGG2NvlznAqMBdHHh1"
+    }
+  ]
+}

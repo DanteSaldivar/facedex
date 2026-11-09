@@ -1,14 +1,17 @@
-import {Injectable, ConflictException, UnauthorizedException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 
 import { UsersService } from '../users/users.service';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginLog, LoginLogDocument } from './schemas/login-log.schema';
 import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
+import { ConfigService } from '@nestjs/config';
+import { AUTH_COOKIE_NAME, JWT_EXPIRES_IN_MS } from 'src/common/constantes/auth.constant';
 
 @Injectable()
 export class AuthService {
@@ -16,10 +19,45 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private cloudinaryService: CloudinaryService,
+    private configService: ConfigService,
     @InjectModel(LoginLog.name) private loginLogModel: Model<LoginLogDocument>,
   ) { }
 
-  async registro(dto: RegistroDto, file?: Express.Multer.File) {
+  // GALLETAS //
+
+  private getCookieOptions() {
+    const secure = this.configService.get<string>('COOKIE_SECURE') === 'true';
+    const sameSiteRaw = (this.configService.get<string>('COOKIE_SAMESITE') || 'lax').toLowerCase();
+    const sameSite = (['lax', 'strict', 'none'].includes(sameSiteRaw)
+      ? sameSiteRaw
+      : 'none') as 'lax' | 'strict' | 'none';
+
+    return {
+      httpOnly: true,
+      secure,
+      sameSite,
+      path: '/',
+      maxAge: JWT_EXPIRES_IN_MS,
+    };
+  }
+
+  private setAuthCookieAndGetPayload(res: Response, usuario: any) {
+    const token = this.generarToken(usuario);
+    const options = this.getCookieOptions();
+
+    res.cookie(AUTH_COOKIE_NAME, token, options);
+
+    const expiraEn = Date.now() + JWT_EXPIRES_IN_MS;
+    return {
+      usuario: usuario.toJSON ? usuario.toJSON() : usuario,
+      expiraEn,
+    };  
+  }
+
+
+
+
+  async registro(dto: RegistroDto, res: Response, file?: Express.Multer.File) {
     if (dto.password !== dto.repetirPassword) {
       throw new BadRequestException(['Las contraseñas no coinciden']);
     }
@@ -48,9 +86,9 @@ export class AuthService {
     }
 
     let imagenPerfil = '';
-let imagenPerfilPublicId = '';
+    let imagenPerfilPublicId = '';
     if (file) {
-     const imagen = await this.cloudinaryService.subirImagen(file, 'usuarios');
+      const imagen = await this.cloudinaryService.subirImagen(file, 'usuarios');
       imagenPerfil = imagen.url;
       imagenPerfilPublicId = imagen.publicId;
     }
@@ -71,10 +109,8 @@ let imagenPerfilPublicId = '';
         habilitado: true,
       });
 
-      const token = this.generarToken(nuevoUsuario);
-      const usuarioJson = nuevoUsuario.toJSON();
+      return this.setAuthCookieAndGetPayload(res, nuevoUsuario);
 
-      return { token, usuario: usuarioJson };
     } catch (error: any) {
       if (error.code === 11000) {
         const campoRepetido = Object.keys(error.keyPattern || {})[0] || 'campo';
@@ -88,7 +124,7 @@ let imagenPerfilPublicId = '';
     }
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, res: Response) {
     const usuario = await this.usersService.findByIdentificador(dto.identificador!);
 
     if (!usuario) {
@@ -121,10 +157,50 @@ let imagenPerfilPublicId = '';
       fecha: new Date(),
     });
 
-    const token = this.generarToken(usuario);
-    const usuarioJson = usuario.toJSON();
+    return this.setAuthCookieAndGetPayload(res, usuario);
+  }
 
-    return { token, usuario: usuarioJson };
+  async autorizar(usuarioId: string) {
+    const usuario = await this.usersService.findById(usuarioId);
+    if (!usuario || !usuario.habilitado) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Sesión inválida o usuario deshabilitado',
+        error: 'Unauthorized',
+      });
+    }
+
+    const expiraEn = Date.now() + JWT_EXPIRES_IN_MS;
+    return {
+      usuario: usuario.toJSON(),
+      expiraEn,
+    };
+  }
+
+  async refrescarToken(usuarioId: string, res: Response) {
+    const usuario = await this.usersService.findById(usuarioId);
+    if (!usuario || !usuario.habilitado) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Sesión inválida o usuario deshabilitado',
+        error: 'Unauthorized',
+      });
+    }
+
+    return this.setAuthCookieAndGetPayload(res, usuario);
+  }
+
+  async logout(res: Response) {
+    const options = this.getCookieOptions();
+    // Limpieza con las mismas opciones 
+    res.clearCookie(AUTH_COOKIE_NAME, {
+      httpOnly: options.httpOnly,
+      secure: options.secure,
+      sameSite: options.sameSite,
+      path: options.path,
+    });
+
+    return { message: 'Sesión cerrada' };
   }
 
   private generarToken(usuario: any) {

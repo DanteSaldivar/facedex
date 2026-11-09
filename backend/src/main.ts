@@ -2,11 +2,23 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('api');
+
+  app.use(cookieParser());
+
+  // Validación de consistencia para cookies
+  const cookieSecure = configService.get<string>('COOKIE_SECURE') === 'true';
+  const cookieSameSite = (configService.get<string>('COOKIE_SAMESITE') || 'lax').toLowerCase();
+
+  if (cookieSameSite === 'none' && !cookieSecure) {
+    console.error('Si COOKIE_SAMESITE es "none", COOKIE_SECURE debe ser "true".');
+    process.exit(1);
+  }
 
   // ValidationPipe global con formateo de errores en array
   app.useGlobalPipes(

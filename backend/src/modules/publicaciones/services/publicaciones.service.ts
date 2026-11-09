@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Publicacion, PublicacionDocument } from '../schemas/publicacion.schema';
-import { Comentario, ComentarioDocument, } from '../schemas/comentario.schema';
+import { Comentario, ComentarioDocument, } from '../../comentarios/schema/comentario.schema';
 import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
 import { CrearPublicacionDto } from '../dto/crear-publicaciones.dto';
 import { QueryPublicacionesDto } from '../dto/query-publicaciones.dto';
@@ -66,13 +66,11 @@ export class PublicacionesService {
     const { orden, offset, limit, usuarioId } = queryDto;
     const currentUserId = new Types.ObjectId(usuarioTokenId);
 
-    // 1. Construir match inicial
     const matchStage: any = { activa: true };
     if (usuarioId) {
       matchStage.autor = new Types.ObjectId(usuarioId);
     }
 
-    // 2. Definir sort stage
     const sortStage: any = {};
     if (orden === 'likes') {
       sortStage.likesCount = -1;
@@ -81,77 +79,35 @@ export class PublicacionesService {
       sortStage.createdAt = -1;
     }
 
-    // Pipeline de Agregación
-    const pipeline: any[] = [
-      { $match: matchStage },
-      {
-        $addFields: {
-          likesCount: { $size: '$likes' },
-          meGusta: {
-            $in: [currentUserId, '$likes.usuario'],
-          },
-        },
-      },
-      { $sort: sortStage },
-      {
-        $facet: {
-          metadata: [{ $count: 'total' }],
-          data: [
-            { $skip: offset },
-            { $limit: limit },
-            // Lookup Autor
-            {
-              $lookup: {
-                from: 'users',
-                localField: 'autor',
-                foreignField: '_id',
-                as: 'autorData',
-              },
-            },
-            { $unwind: '$autorData' },
-            // Lookup Comentarios (para conteo)
-            {
-              $lookup: {
-                from: 'comentarios',
-                localField: '_id',
-                foreignField: 'publicacion',
-                as: 'comentariosData',
-              },
-            },
-            {
-              $project: {
-                _id: 1,
-                titulo: 1,
-                mensaje: 1,
-                imagenUrl: { $ifNull: ['$imagenUrl', null] },
-                autor: {
-                  _id: '$autorData._id',
-                  nombreUsuario: '$autorData.nombreUsuario',
-                  imagenPerfil: { $ifNull: ['$autorData.imagenPerfil', ''] },
-                },
-                likesCount: 1,
-                meGusta: 1,
-                comentariosCount: { $size: '$comentariosData' },
-                createdAt: 1,
-              },
-            },
-          ],
-        },
-      },
-    ];
-
+    const pipeline = this.construirPipelineAgregacion(matchStage, currentUserId, sortStage, offset, limit);
     const result = await this.publicacionModel.aggregate(pipeline).exec();
+
     const metadata = result[0].metadata;
     const total = metadata.length > 0 ? metadata[0].total : 0;
     const items = result[0].data;
 
-    return {
-      items,
-      total,
-      offset,
-      limit,
-    };
+    return { items, total, offset, limit };
   }
+
+  async obtenerPorId(publicacionId: Types.ObjectId, usuarioTokenId: string) {
+    const currentUserId = new Types.ObjectId(usuarioTokenId);
+    const matchStage = { _id: publicacionId, activa: true };
+    const sortStage = { createdAt: -1 };
+
+    const pipeline = this.construirPipelineAgregacion(matchStage, currentUserId, sortStage);
+    const result = await this.publicacionModel.aggregate(pipeline).exec();
+
+    if (!result || result.length === 0) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'La publicación no existe o fue dada de baja',
+        error: 'Not Found',
+      });
+    }
+
+    return result[0];
+  }
+
 
   async darBajaLogica(publicacionId: Types.ObjectId, usuario: { id: string; perfil: string }) {
     const publicacion = await this.publicacionModel.findOne({
@@ -298,4 +254,82 @@ export class PublicacionesService {
 
     return { items, total };
   }
+
+  // Pipeline reutilizable de Proyección y Agregación para publicaciones
+  
+  private construirPipelineAgregacion(matchStage: any, currentUserId: Types.ObjectId, sortStage: any, offset?: number, limit?: number) {
+    const pipeline: any[] = [
+      { $match: matchStage },
+      {
+        $addFields: {
+          likesCount: { $size: '$likes' },
+          meGusta: {
+            $in: [currentUserId, '$likes.usuario'],
+          },
+        },
+      },
+      { $sort: sortStage },
+    ];
+
+    if (offset !== undefined && limit !== undefined) {
+      pipeline.push({
+        $facet: {
+          metadata: [{ $count: 'total' }],
+          data: [
+            { $skip: offset },
+            { $limit: limit },
+            ...this.getStagesLookupProyeccion(),
+          ],
+        },
+      });
+    } else {
+      // Para la consulta de un elemento único
+      pipeline.push(...this.getStagesLookupProyeccion());
+    }
+
+    return pipeline;
+  }
+
+  private getStagesLookupProyeccion() {
+    return [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'autor',
+          foreignField: '_id',
+          as: 'autorData',
+        },
+      },
+      { $unwind: '$autorData' },
+      {
+        $lookup: {
+          from: 'comentarios',
+          localField: '_id',
+          foreignField: 'publicacion',
+          as: 'comentariosData',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          titulo: 1,
+          mensaje: 1,
+          imagenUrl: { $ifNull: ['$imagenUrl', null] },
+          autor: {
+            _id: '$autorData._id',
+            nombreUsuario: '$autorData.nombreUsuario',
+            imagenPerfil: { $ifNull: ['$autorData.imagenPerfil', ''] },
+          },
+          likesCount: 1,
+          meGusta: 1,
+          comentariosCount: { $size: '$comentariosData' },
+          createdAt: 1,
+        },
+      },
+    ];
+  }
+
+  
+
+
 }

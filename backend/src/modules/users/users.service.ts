@@ -5,8 +5,11 @@ import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
 
+  async findById(id: string): Promise<UserDocument | null> {
+    return this.userModel.findById(id).exec();
+  }
   async findByCorreo(correo: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ correo: correo.toLowerCase() }).select('+password').exec();
   }
