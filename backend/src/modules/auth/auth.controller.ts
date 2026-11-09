@@ -1,11 +1,11 @@
 import { Controller, Post, Body, UseInterceptors, UploadedFile, HttpCode, HttpStatus, UseGuards, Res, } from '@nestjs/common';
 import type { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthService } from './auth.service';
-import { RegistroDto } from './dto/registro.dto';
-import { LoginDto } from './dto/login.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { UsuarioActual } from 'src/common/decoradores/usuario-actual.decorator';
+import { AuthService } from './auth.service.js';
+import { RegistroDto } from './dto/registro.dto.js';
+import { LoginDto } from './dto/login.dto.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { UsuarioActual } from '../../common/decoradores/usuario-actual.decorator.js';
 
 @Controller('auth')
 export class AuthController {

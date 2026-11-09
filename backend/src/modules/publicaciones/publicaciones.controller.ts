@@ -2,12 +2,12 @@ import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, UseInterc
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
 
-import { QueryPublicacionesDto } from './dto/query-publicaciones.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { PublicacionesService } from './services/publicaciones.service';
-import { UsuarioActual } from 'src/common/decoradores/usuario-actual.decorator';
-import { CrearPublicacionDto } from './dto/crear-publicaciones.dto';
-import { ParseObjectIdPipe } from 'src/common/pipes/parse-objet-id/parse-objet-id.pipe';
+import { QueryPublicacionesDto } from './dto/query-publicaciones.dto.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { PublicacionesService } from './services/publicaciones.service.js';
+import { UsuarioActual } from '../../common/decoradores/usuario-actual.decorator.js';
+import { CrearPublicacionDto } from './dto/crear-publicaciones.dto.js';
+import { ParseObjectIdPipe } from '../../common/pipes/parse-objet-id/parse-objet-id.pipe.js';
 
 
 @Controller('publicaciones')

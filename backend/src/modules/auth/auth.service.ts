@@ -5,13 +5,13 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 
-import { UsersService } from '../users/users.service';
-import { RegistroDto } from './dto/registro.dto';
-import { LoginDto } from './dto/login.dto';
-import { LoginLog, LoginLogDocument } from './schemas/login-log.schema';
-import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service';
+import { UsersService } from '../users/users.service.js';
+import { RegistroDto } from './dto/registro.dto.js';
+import { LoginDto } from './dto/login.dto.js';
+import { LoginLog, LoginLogDocument } from './schemas/login-log.schema.js';
+import { CloudinaryService } from '../../common/services/cloudinary/cloudinary.service.js';
 import { ConfigService } from '@nestjs/config';
-import { AUTH_COOKIE_NAME, JWT_EXPIRES_IN_MS } from 'src/common/constantes/auth.constant';
+import { AUTH_COOKIE_NAME, JWT_EXPIRES_IN_MS } from '../../common/constantes/auth.constant.js';
 
 @Injectable()
 export class AuthService {

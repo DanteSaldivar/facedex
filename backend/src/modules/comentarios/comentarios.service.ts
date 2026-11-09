@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, ForbiddenException, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Comentario, ComentarioDocument } from './schema/comentario.schema';
-import { Publicacion, PublicacionDocument } from '../publicaciones/schemas/publicacion.schema';
-import { CrearComentarioDto } from './dto/crear-comentario.dto';
-import { QueryComentariosDto } from './dto/query-comentarios.dto';
+import { Comentario, ComentarioDocument } from './schema/comentario.schema.js';
+import { Publicacion, PublicacionDocument } from '../publicaciones/schemas/publicacion.schema.js';
+import { CrearComentarioDto } from './dto/crear-comentario.dto.js';
+import { QueryComentariosDto } from './dto/query-comentarios.dto.js';
 
 @Injectable()
 export class ComentariosService {

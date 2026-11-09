@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Comentario, ComentarioSchema } from './schema/comentario.schema';
-import { Publicacion, PublicacionSchema } from '../publicaciones/schemas/publicacion.schema';
-import { ComentariosController } from './comentarios.controller';
-import { ComentariosService } from './comentarios.service';
+import { Comentario, ComentarioSchema } from './schema/comentario.schema.js';
+import { Publicacion, PublicacionSchema } from '../publicaciones/schemas/publicacion.schema.js';
+import { ComentariosController } from './comentarios.controller.js';
+import { ComentariosService } from './comentarios.service.js';
 
 @Module({
   imports: [

@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Put, Body, Param, Query, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { ComentariosService } from './comentarios.service';
-import { CrearComentarioDto } from './dto/crear-comentario.dto';
-import { QueryComentariosDto } from './dto/query-comentarios.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ParseObjectIdPipe } from 'src/common/pipes/parse-objet-id/parse-objet-id.pipe';
-import { UsuarioActual } from 'src/common/decoradores/usuario-actual.decorator';
+import { ComentariosService } from './comentarios.service.js';
+import { CrearComentarioDto } from './dto/crear-comentario.dto.js';
+import { QueryComentariosDto } from './dto/query-comentarios.dto.js';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
+import { ParseObjectIdPipe } from '../../common/pipes/parse-objet-id/parse-objet-id.pipe.js';
+import { UsuarioActual } from '../../common/decoradores/usuario-actual.decorator.js';
 
 @Controller('publicaciones')
 @UseGuards(JwtAuthGuard)

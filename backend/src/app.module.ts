@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CloudinaryService } from './common/services/cloudinary/cloudinary.service';
-import { UsersModule } from './modules/users/users.module';
+import { CloudinaryService } from './common/services/cloudinary/cloudinary.service.js';
+import { UsersModule } from './modules/users/users.module.js';
 
-import { AuthModule } from './modules/auth/auth.module';
-import { PublicacionesModule } from './modules/publicaciones/publicaciones.module';
-import { ComentariosModule } from './modules/comentarios/comentarios.module';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { PublicacionesModule } from './modules/publicaciones/publicaciones.module.js';
+import { ComentariosModule } from './modules/comentarios/comentarios.module.js';
 
 
 @Module({
