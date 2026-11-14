@@ -1,0 +1,38 @@
+<div class="pantalla-cargando-container">
+  <div class="caja-splash-manga">
+    
+    <!-- Logo FaceDex con Destello Shōnen -->
+    <div class="logo-splash">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 50" width="220" height="48" aria-label="FaceDex Logo">
+        <polygon points="5,4 235,0 225,46 0,46" fill="#D90429" stroke="#111111" stroke-width="3" />
+        <polygon points="10,8 228,4 220,42 6,42" fill="#FAF7F0" stroke="#111111" stroke-width="2" />
+        <text x="16" y="32" font-family="'Bangers', cursive, impact, sans-serif" font-size="28" fill="#111111" letter-spacing="1">
+          face<tspan fill="#D90429">DEX</tspan>
+        </text>
+        <polygon points="195,10 200,18 208,19 202,25 204,33 195,28 186,33 188,25 182,19 190,18" fill="#FFC409" stroke="#111111" stroke-width="2" />
+      </svg>
+    </div>
+
+    @if (errorConexion()) {
+      <div class="bloque-error-splash">
+        <span class="onomatopoeia ono-error">¡ZUUN!</span>
+        <p class="texto-error">No pudimos conectar con el servidor.</p>
+        <app-button variant="primario" (onClick)="reintentar()">
+          REINTENTAR CONEXIÓN
+        </app-button>
+      </div>
+    } @else {
+      <div class="bloque-spinner">
+        <app-spinner tamano="lg" mensaje="Cargando tu universo manga..."></app-spinner>
+
+        @if (servidorDespertando()) {
+          <div class="aviso-despertando">
+            <span class="onomatopoeia-mini">¡WAIT!</span>
+            <p>El servidor se está conectando, un momento...</p>
+          </div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

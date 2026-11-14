@@ -1,8 +1,8 @@
-<button
-      [type]="type()"
-      [disabled]="disabled()"
-      [ngClass]="[variante(), size(), block() ? 'w-full' : '']"
-      (click)="onClick.emit($event)"
-      class="manga-btn">
-      <ng-content></ng-content>
-    </button>
+<button [type]="type()" [disabled]="disabled()" [ngClass]="[
+    variante(),
+    size(),
+    block() ? 'w-full' : '',
+    compacto() ? 'compacto' : ''
+  ]" (click)="onClick.emit($event)" class="manga-btn">
+  <ng-content></ng-content>
+</button>

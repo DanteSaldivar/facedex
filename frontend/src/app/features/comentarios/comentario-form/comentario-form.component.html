@@ -1,0 +1,29 @@
+
+<form [formGroup]="form" (ngSubmit)="enviarComentario()" class="form-comentario-manga">
+  <div class="caja-input-comentario">
+    <textarea
+      formControlName="mensaje"
+      rows="2"
+      placeholder="Escribí un comentario estilo viñeta... (máx 300)"
+      class="textarea-comentario"
+      [class.error]="esInvalido"></textarea>
+    
+    <div class="pie-formulario-comentario">
+      <span class="contador-caracteres" [class.limite]="contadorCaracteres >= 300">
+        {{ contadorCaracteres }}/300
+      </span>
+
+      <app-button
+        type="submit"
+        variant="primario"
+        [disabled]="form.invalid || enviando()">
+        @if (enviando()) {
+          ENVIANDO...
+        } @else {
+          <i class="fa-regular fa-comment" aria-hidden="true"></i>
+          COMENTAR
+        }
+      </app-button>
+    </div>
+  </div>
+</form>

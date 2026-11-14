@@ -8,7 +8,7 @@ import { Readable } from 'stream';
 @Injectable()
 export class CloudinaryService {
 
-     private readonly logger = new Logger(CloudinaryService.name);
+    private readonly logger = new Logger(CloudinaryService.name);
 
     constructor(private configService: ConfigService) {
         cloudinary.config({
@@ -27,14 +27,23 @@ export class CloudinaryService {
                 {
                     folder: carpeta,
                     transformation: [
-                        { width: 400, height: 400, crop: 'fill' },
-                        { quality: 'auto' },
+                        {
+                            width: 1200,
+                            height: 1200,
+                            crop: 'limit',
+                            quality: 'auto',
+                            fetch_format: 'auto',
+                        },
                     ],
                 },
                 (error, result?: UploadApiResponse) => {
                     if (error || !result) {
                         this.logger.error('Cloudinary upload failed', error);
-                        return reject(new InternalServerErrorException('Error al subir la imagen a la nube'));
+                        return reject(
+                            new InternalServerErrorException(
+                                'Error al subir la imagen a la nube',
+                            ),
+                        );
                     }
 
                     resolve({

@@ -13,3 +13,8 @@ export interface Usuario {
   habilitado: boolean;
   createdAt?: string;
 }
+
+export interface RespuestaSesion {
+  usuario: Usuario;
+  expiraEn: number; // Epoc ms (ej: Date.now() + 900000)
+}

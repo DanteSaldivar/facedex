@@ -1,46 +1,62 @@
 <div class="contenedor-feed-manga">
-  
-  <!-- Encabezado de la Sección con Controles -->
+
+  <!-- Encabezado del feed -->
   <header class="encabezado-feed">
+
     <div class="titulo-zona">
       <span class="onomatopoeia">¡CHAPTER 1!</span>
       <h1 class="titulo-manga">FEED DE PUBLICACIONES</h1>
     </div>
 
-    <div class="controles-feed">
-      <!-- Botón para abrir el Modal -->
+    <div class="accion-feed">
       <app-button
         variant="primario"
         size="md"
         (onClick)="mostrarModalCrear.set(true)">
-        ¡NUEVA PUBLICACIÓN! ✍️
+        ¡NUEVA PUBLICACIÓN! <i class="fa-solid fa-pen-nib" aria-hidden="true"></i>
       </app-button>
-
-      <div class="selector-zona">
-        <label for="selectorOrden" class="etiqueta-orden">ORDENAR:</label>
-        <select
-          id="selectorOrden"
-          class="select-manga"
-          [value]="ordenActual()"
-          (change)="alCambiarOrden($any($event.target).value)">
-          <option value="fecha">⏱️ Más Recientes</option>
-          <option value="likes">🔥 Más Populares</option>
-        </select>
-      </div>
     </div>
+
   </header>
 
-  <!-- Lista de Publicaciones o Skeleton Loaders -->
+  <!-- Filtros de orden -->
+  <nav class="filtros-feed" aria-label="Ordenar publicaciones">
+
+    <button
+      type="button"
+      class="boton-filtro-manga"
+      [class.activo]="ordenActual() === 'likes'"
+      [attr.aria-pressed]="ordenActual() === 'likes'"
+      (click)="alCambiarOrden('likes')">
+      <i class="fa-solid fa-fire" aria-hidden="true"></i> POPULARES
+    </button>
+
+    <button
+      type="button"
+      class="boton-filtro-manga"
+      [class.activo]="ordenActual() === 'fecha'"
+      [attr.aria-pressed]="ordenActual() === 'fecha'"
+      (click)="alCambiarOrden('fecha')">
+      <i class="fa-solid fa-clock" aria-hidden="true"></i> RECIENTES
+    </button>
+
+  </nav>
+
+  <!-- Lista de publicaciones o Skeleton Loaders -->
   @if (cargando()) {
+
     <div class="grilla-publicaciones">
       @for (i of [1, 2, 3]; track i) {
         <app-spinner></app-spinner>
         <app-esqueleto-publicacion></app-esqueleto-publicacion>
       }
     </div>
+
   } @else if (publicaciones().length === 0) {
-    <!-- Estado Vacío con Kuro-chan -->
+
+    <!-- Estado vacío -->
     <div class="estado-vacio-manga">
+
       <div class="ilustracion-kuro-vacio">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="140" height="140">
           <circle cx="80" cy="80" r="70" fill="#EDE8DC" stroke="#111111" stroke-width="4" />
@@ -55,13 +71,18 @@
           <path d="M 72 62 Q 80 56 88 62" fill="none" stroke="#FAF7F0" stroke-width="3.5" stroke-linecap="round" />
         </svg>
       </div>
-      <span class="onomatopoeia ono-vacio">¡NANI?!</span>
+
+      <span class="onomatopoeia ono-vacio">¡WhAtS?!</span>
       <h2 class="titulo-vacio">¡TODAVÍA NO HAY PUBLICACIONES!</h2>
-      <p class="texto-vacio">Sé el primero en dibujar una nueva viñeta en la comunidad.</p>
+      <p class="texto-vacio">Sé el primero en publicar una nueva viñeta en la comunidad.</p>
+
     </div>
+
   } @else {
-    <!-- Grilla de Publicaciones -->
+
+    <!-- Publicaciones -->
     <div class="grilla-publicaciones">
+
       @for (pub of publicaciones(); track pub._id) {
         <app-publicacion
           [publicacion]="pub"
@@ -69,21 +90,25 @@
           (eliminada)="alEliminarPublicacion($event)">
         </app-publicacion>
       }
+
     </div>
 
-    <!-- Paginador Manga[cite: 3] -->
+    <!-- Paginador -->
     @if (totalPaginas() > 1) {
       <nav class="paginador-manga" aria-label="Navegación de páginas">
+
         <app-button
           variant="secundario"
           size="sm"
           [disabled]="paginaActual() === 1"
           (onClick)="irAPagina(paginaActual() - 1)">
-          ◄ ANTERIOR
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> ANTERIOR
         </app-button>
 
         <span class="info-pagina">
-          PÁGINA <strong class="num-pag">{{ paginaActual() }}</strong> DE {{ totalPaginas() }}
+          PÁGINA
+          <strong class="num-pag">{{ paginaActual() }}</strong>
+          DE {{ totalPaginas() }}
         </span>
 
         <app-button
@@ -91,17 +116,20 @@
           size="sm"
           [disabled]="paginaActual() === totalPaginas()"
           (onClick)="irAPagina(paginaActual() + 1)">
-          SIGUIENTE ►
+          SIGUIENTE <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
         </app-button>
+
       </nav>
     }
+
   }
+
 </div>
 
-<!-- Modal Flotante de Creación -->
-  @if (mostrarModalCrear()) {
-    <app-modal-crear-publicacion
-      (creada)="alCrearPublicacionExito()"
-      (cerrada)="mostrarModalCrear.set(false)">
-    </app-modal-crear-publicacion>
-  }
+<!-- Modal de creación -->
+@if (mostrarModalCrear()) {
+  <app-modal-crear-publicacion
+    (creada)="alCrearPublicacionExito()"
+    (cerrada)="mostrarModalCrear.set(false)">
+  </app-modal-crear-publicacion>
+}

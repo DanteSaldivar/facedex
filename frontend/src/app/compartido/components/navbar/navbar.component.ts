@@ -3,9 +3,12 @@ import { AuthService } from '../../../core/services/auth.service';
 import { ModalService } from '../../services/modal.service';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { Router, RouterLink } from '@angular/router';
+import { SesionService } from '../../../core/services/sesion.service';
+import { SoloAdminDirective } from '../../directivas/solo-admin.directive';
+import { ResaltarDirective } from '../../directivas/resaltar.directive';
 
 @Component({
-  imports: [AvatarComponent, RouterLink],
+  imports: [AvatarComponent, RouterLink, SoloAdminDirective, ResaltarDirective],
   selector: 'app-navbar',
   styleUrl: './navbar.component.scss',
   templateUrl: './navbar.component.html',
@@ -14,7 +17,7 @@ export class NavbarComponent {
 
   authService = inject(AuthService);
   private servicioModal = inject(ModalService);
-
+  private sesionService = inject(SesionService);
   menuAbierto = signal<boolean>(false);
   modoOscuro = signal<boolean>(false);
   router = inject(Router);
@@ -42,10 +45,19 @@ export class NavbarComponent {
       textoCancelar: 'Cancelar',
     });
 
-    if(confirmado){
-      this.authService.cerrarSesion();
-      this.router.navigate(['/login']); 
-    }
+
+   if (confirmado) {
+    this.sesionService.cancelarTemporizadores();
+
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('Error al cerrar sesión:', error);
+      }
+    });
+  }
 
   }
 }

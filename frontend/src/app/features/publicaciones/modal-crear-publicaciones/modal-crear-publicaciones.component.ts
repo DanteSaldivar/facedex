@@ -27,6 +27,22 @@ export class ModalCrearPublicacionComponent {
   readonly archivoSeleccionado = signal<File | null>(null);
   readonly errorArchivo = signal<string | null>(null);
 
+  readonly tituloValor = signal('');
+
+  readonly tituloRestantes = computed(() =>
+    Math.max(0, 100 - this.tituloValor().length)
+  );
+  onTituloInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.tituloValor.set(target.value);
+  }
+
+  constructor() {
+  this.formulario.controls.titulo.valueChanges.subscribe(valor => {
+    this.tituloValor.set(valor);
+  });
+}
+
   formulario = this.fb.nonNullable.group({
     titulo: ['', [Validators.required, Validators.maxLength(100)]],
     mensaje: ['', [Validators.required, Validators.maxLength(500)]]

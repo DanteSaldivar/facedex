@@ -137,3 +137,36 @@
     font-family: var(--font-hand);
   }
 }
+
+/* Ajustes compactos para el registro */
+.panel-manga-registro {
+  padding: 1rem 1.5rem;
+
+  .encabezado-tarjeta {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.4rem;
+
+    .titulo-manga {
+      font-size: 1.8rem;
+    }
+  }
+
+  .seccion-foto-perfil {
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+
+    .marco-avatar-manga {
+      width: 65px;
+      height: 65px;
+    }
+  }
+
+  .pie-tarjeta {
+    margin-top: 0.5rem;
+    padding-top: 0.4rem;
+  }
+}
+
+.contenedor-autenticacion {
+  padding: 0.75rem 1rem;
+}

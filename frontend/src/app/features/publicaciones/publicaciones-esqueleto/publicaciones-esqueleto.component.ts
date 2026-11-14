@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { SpinnerComponent } from '../../../compartido/components/spinner/spinner.component';
 
 @Component({
-  imports: [SpinnerComponent],
+  imports: [],
   selector: 'app-publicacion-esqueleto',
   styleUrl: './publicaciones-esqueleto.component.scss',
   templateUrl: './publicaciones-esqueleto.component.html',

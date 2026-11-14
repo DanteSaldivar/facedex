@@ -9,6 +9,7 @@ import { UsersModule } from './modules/users/users.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { PublicacionesModule } from './modules/publicaciones/publicaciones.module.js';
 import { ComentariosModule } from './modules/comentarios/comentarios.module.js';
+import { EstadisticasModule } from './modules/estadisticas/estadisticas.module.js';
 
 
 @Module({
@@ -26,7 +27,8 @@ import { ComentariosModule } from './modules/comentarios/comentarios.module.js';
     UsersModule,
     PublicacionesModule,
     AuthModule,
-    ComentariosModule,],
+    ComentariosModule,
+    EstadisticasModule,],
   controllers: [AppController],
   providers: [AppService, CloudinaryService],
 })

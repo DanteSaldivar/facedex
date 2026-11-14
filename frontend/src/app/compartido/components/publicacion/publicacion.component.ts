@@ -6,9 +6,12 @@ import { Usuario } from '../../../core/models/usuario.model';
 import { manejarErrorHttp } from '../../../features/utils/manejador-errores-http';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { TiempoTranscurridoPipe } from '../../pipes/tiempo-transcurrido.pipe';
+import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { RecortarTexto } from '../../pipes/recortar-texto.pipe';
 
 @Component({
-  imports: [AvatarComponent, TiempoTranscurridoPipe],
+  imports: [AvatarComponent, TiempoTranscurridoPipe, RecortarTexto],
   selector: 'app-publicacion',
   styleUrl: './publicacion.component.scss',
   templateUrl: './publicacion.component.html',
@@ -16,11 +19,14 @@ import { TiempoTranscurridoPipe } from '../../pipes/tiempo-transcurrido.pipe';
 export class PublicacionComponent {
 
   private publicacionesService = inject(PublicacionesService);
+  private authService = inject(AuthService);
   private servicioModal = inject(ModalService);
+  private router = inject(Router);
 
   publicacion = input.required<Publicacion>();
   usuarioActual = input<Usuario | null>(null);
-  esAdmin = input(false);
+  modo = input<'feed' | 'detalle'>('feed');
+
 
   eliminada = output<string>();
 
@@ -39,34 +45,32 @@ export class PublicacionComponent {
   }
 
   // Getter helper para tener siempre el estado actualizado de la publicación
-  get pub(): Publicacion {
+  get obtenerPublicacion(): Publicacion {
     return this.publicacionLocal() || this.publicacion();
   }
 
-  // FIX BUG 2: Verificación estricta de propiedad/rol sin mutar autor
-readonly esPropiaOAdmin = computed(() => {
-    const p = this.publicacionLocal() || this.publicacion();
-    const user = this.usuarioActual();
-    const adminFlag = this.esAdmin();
+  get esAutor(): boolean {
+    const usuario = this.authService.usuarioActual();
+    return !!usuario && usuario._id === this.publicacion().autor._id;
+  }
 
-    if (!p || !user || !p.autor || !user._id) {
-      return false;
+  get esAdmin(): boolean {
+    const usuario = this.authService.usuarioActual();
+    return usuario?.perfil === 'administrador';
+  }
+
+  get puedeEliminar(): boolean {
+    return this.esAutor || this.esAdmin;
+  }
+
+  irAlDetalle(): void {
+    if (this.modo() === 'feed') {
+      this.router.navigate(['/publicaciones', this.publicacion()._id]);
     }
+  }
 
-    // Extraer el ID del autor sin importar si viene como String u Objeto
-    const idAutor = typeof p.autor === 'string' ? p.autor : p.autor._id;
-    const miId = user._id;
-
-    // Normalización y comparación estricta de cadenas de texto
-    const esAutor = Boolean(idAutor && miId && String(idAutor).trim() === String(miId).trim());
-    const esAdministrador = adminFlag || user.perfil === 'administrador';
-
-    return esAutor || esAdministrador;
-  });
-
-  
   alAlternarLike(): void {
-    const pubActual = this.pub;
+    const pubActual = this.obtenerPublicacion;
     if (!pubActual || this.procesandoLike()) return;
 
     this.procesandoLike.set(true);
@@ -77,21 +81,19 @@ readonly esPropiaOAdmin = computed(() => {
       ? pubActual.likesCount + 1
       : Math.max(0, pubActual.likesCount - 1);
 
-    // 1. Actualización en tiempo real inmediata (UI Optimista)
     this.publicacionLocal.set({
       ...pubActual,
       meGusta: nuevoMeGusta,
       likesCount: nuevoCount
     });
 
-    // 2. Ejecutar petición correspondiente según la consigna
     const peticion$ = nuevoMeGusta
       ? this.publicacionesService.darLike(pubActual._id)
       : this.publicacionesService.quitarLike(pubActual._id);
 
     peticion$.subscribe({
       next: (res) => {
-        // Aseguramos mantener la estructura del autor intacta para no romper 'esPropiaOAdmin'
+
         this.publicacionLocal.update(actual => {
           if (!actual) return null;
           return {
@@ -103,11 +105,9 @@ readonly esPropiaOAdmin = computed(() => {
         this.procesandoLike.set(false);
       },
       error: (err) => {
-        // Rollback exacto solo si hay un error real de HTTP
         this.publicacionLocal.set(estadoPrevio);
         this.procesandoLike.set(false);
 
-        // Si realmente la publicación ya no existe en el backend (HTTP 404 real)
         if (err.status === 404) {
           this.servicioModal.abrir({
             titulo: '¡PUBLICACIÓN NO ENCONTRADA!',
@@ -127,14 +127,14 @@ readonly esPropiaOAdmin = computed(() => {
    * Confirmación y borrado de la publicación
    */
   async alConfirmarEliminar(): Promise<void> {
-    const pubActual = this.pub;
+    const pubActual = this.obtenerPublicacion;
     if (!pubActual || this.procesandoEliminacion()) return;
 
     const confirmado = await this.servicioModal.confirmar({
       titulo: '¿BORRAR VIÑETA?',
       mensaje: `¿Estás seguro de eliminar la publicación "${pubActual.titulo}"?`,
       tipo: 'confirmacion',
-      onomatopeya: '¡NANI?!',
+      onomatopeya: '¡WHAAT?!',
       textoConfirmar: '¡SÍ, ELIMINAR!',
       textoCancelar: 'CANCELAR'
     });
@@ -147,7 +147,7 @@ readonly esPropiaOAdmin = computed(() => {
       next: () => {
         this.servicioModal.abrir({
           titulo: '¡VIÑETA ELIMINADA!',
-          mensaje: 'La publicación ha sido removida del manga.',
+          mensaje: 'La publicación ha sido removida.',
           tipo: 'exito',
           onomatopeya: '¡BAM!'
         });

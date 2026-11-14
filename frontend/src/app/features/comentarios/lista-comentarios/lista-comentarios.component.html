@@ -1,0 +1,47 @@
+<section class="seccion-comentarios-manga">
+  <!-- Formulario solo si NO es modo lectura -->
+  @if (!modoLectura()) {
+    <app-comentario-form
+      [publicacionId]="publicacionId()"
+      (comentarioCreado)="alCrearComentario($event)">
+    </app-comentario-form>
+  }
+
+  @if (cargando()) {
+    <div class="caja-loader-comentarios">
+      <app-spinner tamano="sm" mensaje="Cargando globos de diálogo..."></app-spinner>
+    </div>
+  } @else if (comentarios().length === 0) {
+    <div class="estado-vacio-comentarios">
+      <span class="onomatopoeia-mini">¡SILENCIO!</span>
+      <p>Todavía no hay comentarios, ¡sé el primero en opinar!</p>
+    </div>
+  } @else {
+    <div class="lista-globos">
+      @for (item of comentarios(); track item._id) {
+        <app-comentario-item
+          [comentario]="item"
+          [publicacionId]="publicacionId()"
+          [modoLectura]="modoLectura()"
+          (comentarioEditado)="alEditarComentario($event)">
+        </app-comentario-item>
+      }
+    </div>
+
+    <!-- Botón Cargar Más -->
+    @if (!modoLectura && comentarios().length < total()) {
+      <div class="caja-cargar-mas">
+        <app-button
+          variant="secundario"
+          [disabled]="cargandoMas()"
+          (onClick)="cargarMas()">
+          @if (cargandoMas()) {
+            CARGANDO MÁS...
+          } @else {
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> CARGAR MÁS COMENTARIOS
+          }
+        </app-button>
+      </div>
+    }
+  }
+</section>

@@ -1,0 +1,67 @@
+@use '../../../../styles/mixin.scss' as *;
+
+
+.globo-comentario-manga {
+  @include manga-panel;
+  background-color: var(--paper-2);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+}
+
+.cabecera-comentario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+
+  .autor-globo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .nombre-usuario {
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+
+  .fecha-comentario {
+    font-size: 0.75rem;
+    color: var(--screentone);
+  }
+
+  .tag-editado {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--screentone);
+    font-weight: 700;
+  }
+}
+
+.btn-editar-comentario {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.texto-comentario {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.form-edicion-comentario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .acciones-edicion {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { UsersService } from '../../../modules/users/users.service.js';
 import { AUTH_COOKIE_NAME } from '../../../common/constantes/auth.constant.js';
+import { UsersService } from '../../users/services/users.service.js';
 
 
 @Injectable()
@@ -33,23 +33,38 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-  const usuario = await this.usersService.findById(payload.sub);
+    if (!payload || !payload.sub) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Sesión inválida',
+        error: 'Unauthorized',
+      });
+    }
 
-  if (!usuario || !usuario.habilitado) {
-    throw new UnauthorizedException({
-      statusCode: 401,
-      message: 'Sesión inválida o usuario deshabilitado',
-      error: 'Unauthorized',
-    });
+    const usuario = await this.usersService.findById(payload.sub);
+
+    if (!usuario) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Sesión inválida',
+        error: 'Unauthorized',
+      });
+    }
+
+    if (!usuario.habilitado) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Tu cuenta está deshabilitada',
+        error: 'Unauthorized',
+      });
+    }
+
+    return {
+      _id: usuario._id.toString(),
+      id: usuario._id.toString(),
+      correo: usuario.correo,
+      nombreUsuario: usuario.nombreUsuario,
+      perfil: usuario.perfil,
+    };
   }
-
-  // Devolvemos _id e id para evitar discrepancias
-  return {
-    _id: usuario._id.toString(),
-    id: usuario._id.toString(),
-    correo: usuario.correo,
-    nombreUsuario: usuario.nombreUsuario,
-    perfil: usuario.perfil,
-  };
-}
 }

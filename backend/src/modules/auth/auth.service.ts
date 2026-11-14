@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
 
-import { UsersService } from '../users/users.service.js';
+import { UsersService } from '../users/services/users.service.js';
 import { RegistroDto } from './dto/registro.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { LoginLog, LoginLogDocument } from './schemas/login-log.schema.js';

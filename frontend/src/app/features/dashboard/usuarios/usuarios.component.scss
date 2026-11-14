@@ -1,0 +1,200 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.contenedor-dashboard-usuarios {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.encabezado-dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 3px solid var(--ink);
+  padding-bottom: 1rem;
+
+  .titulo-manga {
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+  }
+
+  .subtitulo-manga {
+    font-weight: 700;
+    color: var(--screentone);
+  }
+}
+
+.barra-busqueda-manga {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .input-busqueda-manga {
+    @include manga-panel;
+    flex: 1;
+    padding: 0.6rem 1rem;
+    font-family: var(--font-body);
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  }
+}
+
+.contenedor-tabla-responsive {
+  overflow-x: auto;
+  @include manga-panel;
+  background-color: var(--paper);
+  box-shadow: 8px 8px 0px var(--ink);
+}
+
+.tabla-manga {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  th, td {
+    padding: 0.85rem 1rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  th {
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    background-color: var(--paper-2);
+  }
+
+  .texto-bold {
+    font-weight: 800;
+  }
+}
+
+.badge-perfil, .badge-estado {
+  @include manga-panel;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+
+  &.admin {
+    background-color: var(--accent-2);
+  }
+
+  &.deshabilitado {
+    background-color: var(--screentone);
+    color: var(--paper);
+  }
+}
+
+.pie-paginacion-manga {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+
+  .info-paginas {
+    font-weight: 800;
+  }
+
+  .botones-paginas {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+/* Modal Alta */
+.overlay-modal-manga {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.panel-manga-modal {
+  @include manga-panel;
+  background-color: var(--paper);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  box-shadow: 10px 10px 0px var(--ink);
+
+  .header-modal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+
+    h2 {
+      font-family: var(--font-title);
+    }
+
+    .btn-cerrar {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.grilla-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.campo-radio-perfil {
+  margin-bottom: 1rem;
+
+  .label-radio {
+    font-family: var(--font-hand);
+    font-weight: 800;
+  }
+
+  .opciones-radio {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.35rem;
+    font-weight: 700;
+  }
+}
+
+.campo-foto-modal {
+  margin: 1rem 0;
+
+  .btn-foto-modal {
+    @include manga-panel;
+    background-color: var(--paper-2);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font-weight: 800;
+  }
+
+  .input-file-oculto {
+    display: none;
+  }
+
+  .preview-check {
+    margin-left: 0.75rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+}
+
+.acciones-modal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}

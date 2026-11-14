@@ -1,0 +1,24 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.seccion-comentarios-manga {
+  margin-top: 1.5rem;
+}
+
+.caja-loader-comentarios {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.estado-vacio-comentarios {
+  @include manga-panel;
+  background-color: var(--paper);
+  padding: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--screentone);
+}
+
+.caja-cargar-mas {
+  margin-top: 1rem;
+  text-align: center;
+}

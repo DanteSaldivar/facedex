@@ -1,3 +1,4 @@
+
 <div class="contenedor-autenticacion">
   <div class="panel-manga-registro">
     
@@ -17,7 +18,9 @@
           @if (vistaPreviaFoto()) {
             <img [src]="vistaPreviaFoto()" alt="Vista previa de perfil" class="imagen-avatar" />
           } @else {
-            <span class="avatar-placeholder">👤</span>
+            <span class="avatar-placeholder">
+              <i class="fa-solid fa-user" aria-hidden="true"></i>
+            </span>
           }
         </div>
 
@@ -30,11 +33,13 @@
 
         @if (vistaPreviaFoto()) {
           <button type="button" class="boton-archivo-manga" (click)="quitarFoto()">
-            🗑️ Eliminar Foto
+            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+            Eliminar Foto
           </button>
         } @else {
           <label for="inputFotoPerfil" class="boton-archivo-manga">
-            📷 Elegir Foto de Perfil
+            <i class="fa-solid fa-camera" aria-hidden="true"></i>
+            Elegir Foto de Perfil
           </label>
         }
 
@@ -138,7 +143,8 @@
             ¡CREANDO CUENTA...!
             <app-spinner></app-spinner>
           } @else {
-            ¡UNIRSE A LA AVENTURA! 🚀
+            ¡UNIRSE A LA AVENTURA!
+            <i class="fa-solid fa-rocket" aria-hidden="true"></i>
           }
         </app-button>
       </div>

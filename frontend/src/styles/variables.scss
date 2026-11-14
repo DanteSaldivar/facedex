@@ -21,13 +21,14 @@
 
 // Modo Oscuro (Ink Mode)
 body.dark-theme {
-  --ink: #FAF7F0;
-  --paper: #121212;
-  --paper-2: #1E1E1E;
-  --screentone: #4A4A4A;
-  --accent: #FF4D6D;
-  --accent-2: #FFD60A;
-  --success: #2A9D5C;
+  --ink: #F2E9D8;       // Tinta clara para textos y bordes
+  --paper: #292724;     // Fondo principal: gris cálido
+  --paper-2: #38342F;   // Paneles y superficies
+  --screentone: #514B43; // Puntos del fondo manga
+
+  --accent: #E84A5F;    // Rojo cómic
+  --accent-2: #F4C95D;  // Amarillo vintage
+  --success: #6EAD83;  // Verde suave
 }
 
 .onomatopoeia {

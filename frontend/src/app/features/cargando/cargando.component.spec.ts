@@ -1,0 +1,21 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CargandoComponent } from './cargando.component';
+
+describe('CargandoComponent', () => {
+  let component: CargandoComponent;
+  let fixture: ComponentFixture<CargandoComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CargandoComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(CargandoComponent);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

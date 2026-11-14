@@ -1,70 +1,89 @@
-@if (pub) {
-  <article class="tarjeta-viñeta-manga">
-    
-    <!-- Header de la Viñeta -->
-    <header class="header-viñeta">
-      <div class="autor-info">
-        <app-avatar
-          [imagenUrl]="pub.autor.imagenPerfil"
-          [nombre]="pub.autor.nombreUsuario"
-          [tamano]="42">
-        </app-avatar>
-        <div class="datos-autor">
-          <span class="nombre-usuario">&#64;{{ pub.autor.nombreUsuario }}</span>
-          <time class="fecha-relativa" [attr.datetime]="pub.createdAt">
-            ⏱️ {{ pub.createdAt | tiempoTranscurrido }}
-          </time>
-        </div>
-      </div>
+<article class="tarjeta-viñeta-manga" [class.modo-detalle]="modo() === 'detalle'">
 
-      <!-- Botón de Eliminar: Visible ÚNICAMENTE si es propia o admin -->
-      @if (esPropiaOAdmin()) {
-        <button
-          type="button"
-          class="boton-eliminar-manga"
-          [disabled]="procesandoEliminacion()"
-          (click)="alConfirmarEliminar()"
-          aria-label="Eliminar publicación"
-          title="Eliminar publicación">
-          🗑️
-        </button>
-      }
-    </header>
+  <!-- Header de la Viñeta -->
+  <header class="header-viñeta">
+    <div class="autor-info">
+      <app-avatar [imagenUrl]="obtenerPublicacion.autor.imagenPerfil" [nombre]="obtenerPublicacion.autor.nombreUsuario"
+        [tamano]="42">
+      </app-avatar>
 
-    <!-- Título y Mensaje -->
-    <h2 class="titulo-publicacion">{{ pub.titulo }}</h2>
-    <p class="mensaje-publicacion">{{ pub.mensaje }}</p>
-
-    <!-- Imagen Opcional (se oculta si es null/undefined) -->
-    @if (pub.imagenUrl) {
-      <div class="marco-imagen-manga">
-        <img [src]="pub.imagenUrl" [alt]="pub.titulo" class="imagen-post" loading="lazy" />
-      </div>
-    }
-
-    <!-- Footer de Reacciones -->
-    <footer class="footer-viñeta">
-      <button
-        type="button"
-        class="boton-like-manga"
-        [class.doki-activo]="pub.meGusta"
-        [disabled]="procesandoLike()"
-        [attr.aria-pressed]="pub.meGusta"
-        [attr.aria-label]="pub.meGusta ? 'Quitar me gusta' : 'Dar me gusta'"
-        (click)="alAlternarLike()">
-        <span class="onomatopoeia-doki" [class.efecto-impacto]="pub.meGusta">
-          {{ pub.meGusta ? '¡DOKI! ❤️' : '🤍 LIKE' }}
+      <div class="datos-autor">
+        <span class="nombre-usuario">
+          @{{ obtenerPublicacion.autor.nombreUsuario }}
         </span>
-        <span class="contador-likes">{{ pub.likesCount }}</span>
-      </button>
 
-      <div class="indicador-comentarios" aria-label="Cantidad de comentarios">
-        <span class="icono-comentario">💬</span>
-        <span class="contador-comentarios">{{ pub.comentariosCount }}</span>
+        <time class="fecha-relativa" [attr.datetime]="obtenerPublicacion.createdAt">
+          <i class="fa-regular fa-clock" aria-hidden="true"></i>
+          {{ obtenerPublicacion.createdAt | tiempoTranscurrido }}
+        </time>
       </div>
-    </footer>
+    </div>
 
-    <!-- Proyección para Comentarios -->
-    <ng-content select="[slot=comentarios]"></ng-content>
-  </article>
-}
+    <!-- Botón eliminar -->
+    @if (puedeEliminar) {
+    <button type="button" class="boton-eliminar-manga" [disabled]="procesandoEliminacion()"
+      (click)="alConfirmarEliminar()" aria-label="Eliminar publicación" title="Eliminar publicación">
+      <i class="fa-solid fa-trash" aria-hidden="true"></i>
+    </button>
+    }
+  </header>
+
+  <!-- Título -->
+  <h2 class="titulo-publicacion" [class.clickeable]="modo() === 'feed'" (click)="irAlDetalle()">
+    {{ modo() === 'feed' ? (publicacion().titulo | recortarTexto:100) : publicacion().titulo }}
+  </h2>
+
+  <!-- Mensaje -->
+  <p class="mensaje-publicacion">
+    {{ obtenerPublicacion.mensaje }}
+  </p>
+
+  <!-- Imagen opcional -->
+  @if (obtenerPublicacion.imagenUrl) {
+  <div class="marco-imagen-manga" [class.clickeable]="modo() === 'feed'" (click)="irAlDetalle()">
+    <img [src]="obtenerPublicacion.imagenUrl" [alt]="obtenerPublicacion.titulo" class="imagen-post" loading="lazy" />
+  </div>
+  }
+
+  <!-- Footer de Reacciones -->
+  <footer class="footer-viñeta">
+
+    <button type="button" class="boton-like-manga" [class.doki-activo]="obtenerPublicacion.meGusta"
+      [disabled]="procesandoLike()" [attr.aria-pressed]="obtenerPublicacion.meGusta"
+      [attr.aria-label]="obtenerPublicacion.meGusta ? 'Quitar me gusta' : 'Dar me gusta'" (click)="alAlternarLike()">
+
+      <span class="onomatopoeia-doki" [class.efecto-impacto]="obtenerPublicacion.meGusta">
+        @if (obtenerPublicacion.meGusta) {
+        ¡DOKI! <i class="fa-solid fa-heart" aria-hidden="true"></i>
+        } @else {
+        <i class="fa-regular fa-heart" aria-hidden="true"></i> LIKE
+        }
+      </span>
+
+      <span class="contador-likes">
+        {{ obtenerPublicacion.likesCount }}
+      </span>
+    </button>
+
+    <div class="indicador-comentarios" aria-label="Cantidad de comentarios">
+      @if (modo() === 'feed') {
+      <button type="button" class="btn-ver-detalle-manga" (click)="irAlDetalle()">
+        <span class="icono-comentario">
+          <i class="fa-regular fa-comment" aria-hidden="true"></i>
+        </span>
+        <span class="contador-comentarios">
+          {{ obtenerPublicacion.comentariosCount }}
+        </span>
+      </button>
+      } @else {
+      <span class="icono-comentario">
+        <i class="fa-regular fa-comment" aria-hidden="true"></i>
+      </span>
+      <span class="contador-comentarios">
+        {{ obtenerPublicacion.comentariosCount }}
+      </span>
+      }
+    </div>
+
+  </footer>
+</article>

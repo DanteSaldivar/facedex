@@ -69,6 +69,7 @@ export class LoginComponent {
           tipo: 'exito',
           onomatopeya: '¡SUGOI!'
         });
+        
         this.router.navigate(['/publicaciones']);
       },
       error: (err) => {

@@ -12,3 +12,27 @@
   transform: rotate(-3deg);
   user-select: none;
 }
+
+body {
+  min-height: 100vh;
+  background-color: var(--paper);
+  background-image: radial-gradient(
+    var(--screentone) 15%,
+    transparent 16%
+  );
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+
+.manga-hover {
+  transform: translate(-3px, -3px) rotate(-1deg);
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  filter: brightness(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manga-hover {
+    transition: none;
+  }
+}

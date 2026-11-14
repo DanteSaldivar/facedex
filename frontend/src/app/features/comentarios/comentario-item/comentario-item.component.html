@@ -1,0 +1,33 @@
+<div class="globo-comentario-manga">
+    <header class="cabecera-comentario">
+        <div class="autor-globo">
+            <app-avatar [imagenUrl]="comentario().autor.imagenPerfil" [nombre]="comentario().autor.nombreUsuario"
+                [tamano]=32></app-avatar>
+            <span class="nombre-usuario">@{{ comentario().autor.nombreUsuario }}</span>
+            <span class="fecha-comentario">{{ comentario().createdAt | tiempoTranscurrido }}</span>
+
+            @if (comentario().modificado) {
+            <span class="tag-editado">(editado)</span>
+            }
+        </div>
+
+        @if (esAutor && !modoLectura && !modoEdicion()) {
+        <button type="button" class="btn-editar-comentario" (click)="activarEdicion()" aria-label="Editar comentario">
+            <i class="fa-solid fa-pen" aria-hidden="true"></i> Editar
+        </button>
+        }
+    </header>
+
+    @if (modoEdicion()) {
+    <form [formGroup]="formEdicion" (ngSubmit)="guardarEdicion()" class="form-edicion-comentario">
+        <textarea formControlName="mensaje" rows="2" class="textarea-comentario"></textarea>
+        <div class="acciones-edicion">
+            <app-button type="button" variant="secundario" (onClick)="cancelarEdicion()">CANCELAR</app-button>
+            <app-button type="submit" variant="primario"
+                [disabled]="formEdicion.invalid || guardando()">GUARDAR</app-button>
+        </div>
+    </form>
+    } @else {
+    <p class="texto-comentario">{{ comentario().mensaje }}</p>
+    }
+</div>

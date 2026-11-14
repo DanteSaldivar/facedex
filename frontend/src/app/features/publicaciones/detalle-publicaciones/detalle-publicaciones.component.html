@@ -1,0 +1,35 @@
+<div class="contenedor-detalle-manga">
+  <!-- Botón Volver -->
+  <div class="barra-navegacion-superior">
+    <app-button variant="secundario" (onClick)="volverAlFeed()">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> VOLVER AL FEED
+    </app-button>
+  </div>
+
+  @if (cargando()) {
+    <div class="caja-cargando-detalle">
+      <app-spinner tamano="lg" mensaje="Cargando viñeta completa..."></app-spinner>
+    </div>
+  } @else if (noEncontrada()) {
+    <div class="panel-manga-404">
+      <span class="onomatopoeia">¡NANI?!</span>
+      <h2>ESTA PUBLICACIÓN NO EXISTE O FUE ELIMINADA</h2>
+      <p>La viñeta que estás buscando ya no forma parte del catálogo de FaceDex.</p>
+      <app-button variant="primario" (onClick)="volverAlFeed()">
+        <i class="fa-solid fa-house" aria-hidden="true"></i> VOLVER AL INICIO
+      </app-button>
+    </div>
+  } @else if (publicacion()) {
+    <!-- Publicación en modo detalle grande -->
+    <app-publicacion [publicacion]="publicacion()!" modo="detalle"></app-publicacion>
+
+
+    <div class="bloque-comentarios-slot">
+      <app-lista-comentarios
+      [publicacionId]="publicacion()!._id"
+      [limiteInicial]="10"
+      (cambioTotalComentarios)="actualizarContadorComentarios($event)">
+    </app-lista-comentarios>
+    </div>
+  }
+</div>

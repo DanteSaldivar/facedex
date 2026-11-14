@@ -1,80 +1,72 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Service, signal } from '@angular/core';
-import { environment } from '../../../environments/environment.prod';
-import { Usuario } from '../models/usuario.model';
-import { Observable, tap } from 'rxjs';
-import { AuthRespuesta, PeticionLogin } from '../models/auth.model';
+import { inject, Injectable, signal } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { RespuestaSesion, Usuario } from '../models/usuario.model';
+import { catchError, Observable, of, tap } from 'rxjs';
 
-@Service()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
-    private http = inject(HttpClient);
-  private readonly URL_AUTH = `${environment.apiUrl}/auth`;
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
 
-  // Signals reactivos para el estado de autenticación
-  readonly usuarioActual = signal<Usuario | null>(this.obtenerUsuarioInicial());
-  readonly estaLogueado = computed(() => !!this.usuarioActual() && !!this.obtenerToken());
-  readonly esAdmin = computed(() => this.usuarioActual()?.perfil === 'administrador');
+  readonly usuarioActual = signal<Usuario | null>(null);
+  readonly expiraEn = signal<number | null>(null);
+  readonly cargandoInicial = signal<boolean>(true);
 
-  /**
-   * Registro con multipart/form-data
-   * @param datosFormulario FormData que incluye la clave 'imagen' para el archivo
-   */
-  registro(datosFormulario: FormData): Observable<AuthRespuesta> {
-    return this.http.post<AuthRespuesta>(`${this.URL_AUTH}/registro`, datosFormulario).pipe(
-      tap((respuesta) => this.guardarSesion(respuesta))
-    );
+  constructor() {
+    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+      localStorage.removeItem('token');
+    }
   }
 
-  /**
-   * Login enviando { identificador, password }
-   */
-  login(credenciales: PeticionLogin): Observable<AuthRespuesta> {
-      return this.http.post<AuthRespuesta>(`${this.URL_AUTH}/login`, credenciales).pipe(
-      tap((respuesta) => this.guardarSesion(respuesta))
-    );
+  estaLogueado(): boolean {
+    return !!this.usuarioActual();
   }
 
-  /**
-   * Cierra sesión y limpia tokens
-   */
-  cerrarSesion(): void {
-    localStorage.removeItem('token_mangakai');
-    localStorage.removeItem('usuario_mangakai');
+  establecerSesion(res: RespuestaSesion): void {
+    this.usuarioActual.set(res.usuario);
+    this.expiraEn.set(res.expiraEn);
+  }
+
+  limpiarEstadoMemoria(): void {
     this.usuarioActual.set(null);
+    this.expiraEn.set(null);
   }
 
-  /**
-   * Obtiene el JWT almacenado
-   */
-  obtenerToken(): string | null {
-    return localStorage.getItem('token_mangakai');
+  login(credenciales: { identificador: string; password: string }): Observable<RespuestaSesion> {
+    return this.http.post<RespuestaSesion>(`${this.apiUrl}/auth/login`, credenciales).pipe(
+      tap(res => this.establecerSesion(res))
+    );
   }
 
-  /**
-   * Guarda el token y el perfil de usuario en localStorage y actualiza el signal
-   */
-  private guardarSesion(respuesta: AuthRespuesta): void {
-    if (respuesta.token) {
-      localStorage.setItem('token_mangakai', respuesta.token);
-    }
-    if (respuesta.usuario) {
-      localStorage.setItem('usuario_mangakai', JSON.stringify(respuesta.usuario));
-      this.usuarioActual.set(respuesta.usuario);
-    }
+  registro(datosRegistro: FormData | any): Observable<RespuestaSesion> {
+    return this.http.post<RespuestaSesion>(`${this.apiUrl}/auth/registro`, datosRegistro).pipe(
+      tap(res => this.establecerSesion(res))
+    );
   }
 
-  /**
-   * Recupera el usuario desde localStorage al iniciar la app
-   */
-  private obtenerUsuarioInicial(): Usuario | null {
-    const usuarioGuardado = localStorage.getItem('usuario_mangakai');
-    if (!usuarioGuardado) return null;
-    try {
-      return JSON.parse(usuarioGuardado) as Usuario;
-    } catch {
-      localStorage.removeItem('usuario_mangakai');
-      return null;
-    }
+  autorizar(): Observable<RespuestaSesion> {
+    return this.http.post<RespuestaSesion>(`${this.apiUrl}/auth/autorizar`, {}).pipe(
+      tap(res => this.establecerSesion(res))
+    );
+  }
+
+  refrescar(): Observable<RespuestaSesion> {
+    return this.http.post<RespuestaSesion>(`${this.apiUrl}/auth/refrescar`, {}).pipe(
+      tap(res => this.establecerSesion(res))
+    );
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
+      tap(() => this.limpiarEstadoMemoria()),
+      catchError(() => {
+        this.limpiarEstadoMemoria();
+        return of(null);
+      })
+    );
   }
 }

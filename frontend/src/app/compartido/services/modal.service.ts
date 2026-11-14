@@ -11,7 +11,7 @@ export interface ModalConfig {
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
-  
+
   readonly estaAbierto = signal(false);
   readonly configuracion = signal<ModalConfig | null>(null);
 
@@ -52,6 +52,10 @@ export class ModalService {
       this.resolverPromesa(resultado);
       this.resolverPromesa = null;
     }
+  }
+
+  cerrarModalAbierto(): void {
+    this.cerrar(false);
   }
 
 }

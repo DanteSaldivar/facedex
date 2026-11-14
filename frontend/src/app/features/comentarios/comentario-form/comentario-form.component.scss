@@ -1,0 +1,44 @@
+@use '../../../../styles/mixin.scss' as *;
+
+.form-comentario-manga {
+  margin-bottom: 1.5rem;
+}
+
+.caja-input-comentario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.textarea-comentario {
+  @include manga-panel;
+  padding: 0.75rem;
+  font-family: var(--font-body);
+  resize: none;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0px var(--accent);
+  }
+
+  &.error {
+    border-color: var(--accent-2);
+  }
+}
+
+.pie-formulario-comentario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .contador-caracteres {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--screentone);
+
+    &.limite {
+      color: var(--accent-2);
+    }
+  }
+}

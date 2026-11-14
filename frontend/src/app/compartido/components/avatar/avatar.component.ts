@@ -1,7 +1,8 @@
 import { Component, computed, input } from '@angular/core';
+import { InicialesPipe } from '../../pipes/iniciales.pipe';
 
 @Component({
-  imports: [],
+  imports: [InicialesPipe],
   selector: 'app-avatar',
   styleUrl: './avatar.component.scss',
   templateUrl: './avatar.component.html',
@@ -10,6 +11,7 @@ export class AvatarComponent {
 
   imagenUrl = input<string | undefined>();
   nombre = input<string>('Usuario');
+  apellido = input<string>('');
   tamano = input<number>(44);
 
   iniciales = computed(() => {

@@ -22,11 +22,14 @@ export class InputComponent implements ControlValueAccessor {
   errorMessage = input('');
   isInvalid = input(false);
 
+  maxLength = input<number | null>(null);
+  contador = input<number | null>(null);
+
   value = '';
   disabled = false;
 
-  onChange: (value: string) => void = () => {};
-  onTouch: () => void = () => {};
+  onChange: (value: string) => void = () => { };
+  onTouch: () => void = () => { };
 
   writeValue(value: string | null): void {
     this.value = value ?? '';

@@ -1,13 +1,26 @@
 <div class="manga-field-group">
   @if (label()) {
-    <label class="manga-label">{{ label() }}</label>
-  }
+  <div class="header-label-textarea">
+    <label class="etiqueta-manga">
+      {{ label() }}
+    </label>
+
+    @if (contador() !== null) {
+      <span
+        class="contador-caracteres"
+        [class.limite-cercano]="contador()! < 20">
+        {{ contador() }} restantes
+      </span>
+    }
+  </div>
+}
 
   <input
     [type]="type()"
     [value]="value"
     [placeholder]="placeholder()"
     [disabled]="disabled"
+    [attr.maxlength]="maxLength()"
     [class.invalid]="isInvalid()"
     (input)="onInput($event)"
     (blur)="onTouch()"

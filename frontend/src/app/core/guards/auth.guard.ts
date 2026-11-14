@@ -9,6 +9,11 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  //redirigimos a /cargando para esperar
+  if (authService.cargandoInicial()) {
+    return router.createUrlTree(['/cargando']);
+  }
+
   if (authService.estaLogueado()) {
     return true;
   }
@@ -24,6 +29,10 @@ export const publicoGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  if (authService.cargandoInicial()) {
+    return router.createUrlTree(['/cargando']);
+  }
+  
   if (authService.estaLogueado()) {
     router.navigate(['/publicaciones']);
     return false;

@@ -9,9 +9,11 @@ import { PublicacionComponent } from '../../../compartido/components/publicacion
 import { BloqueComentariosComponent } from '../bloque-comentarios/bloque-comentarios.component';
 import { PublicacionesEsqueletoComponent } from '../../publicaciones/publicaciones-esqueleto/publicaciones-esqueleto.component';
 import { DatePipe, UpperCasePipe } from '@angular/common';
+import { ListaComentariosComponent } from '../../comentarios/lista-comentarios/lista-comentarios.component';
+import { SoloAdminDirective } from '../../../compartido/directivas/solo-admin.directive';
 
 @Component({
-  imports: [AvatarComponent, PublicacionComponent, BloqueComentariosComponent, PublicacionesEsqueletoComponent, UpperCasePipe, DatePipe],
+  imports: [AvatarComponent, PublicacionComponent, PublicacionesEsqueletoComponent, UpperCasePipe, DatePipe, ListaComentariosComponent, SoloAdminDirective],
   selector: 'app-perfil',
   styleUrl: './perfil.component.scss',
   templateUrl: './perfil.component.html',

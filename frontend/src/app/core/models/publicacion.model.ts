@@ -10,8 +10,8 @@ export interface Publicacion {
   _id: string;
   titulo: string;
   mensaje: string;
-  imagenUrl?: string | null;
-  autor: AutorPublicacion;
+  imagenUrl: string | null;
+  autor: Pick<Usuario, '_id' | 'nombreUsuario' | 'imagenPerfil'>;
   likesCount: number;
   meGusta: boolean;
   comentariosCount: number;

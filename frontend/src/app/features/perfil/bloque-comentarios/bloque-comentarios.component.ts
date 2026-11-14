@@ -3,6 +3,7 @@ import { PublicacionesService } from '../../../core/services/publicaciones.servi
 import { Comentario } from '../../../core/models/publicacion.model';
 import { AvatarComponent } from '../../../compartido/components/avatar/avatar.component';
 import { TiempoTranscurridoPipe } from '../../../compartido/pipes/tiempo-transcurrido.pipe';
+import { ComentariosService } from '../../../core/services/comentarios.service';
 
 @Component({
   imports: [AvatarComponent, TiempoTranscurridoPipe],
@@ -11,8 +12,7 @@ import { TiempoTranscurridoPipe } from '../../../compartido/pipes/tiempo-transcu
   templateUrl: './bloque-comentarios.component.html',
 })
 export class BloqueComentariosComponent {
-
-  private publicacionesService = inject(PublicacionesService);
+  private comentariosService = inject(ComentariosService)
 
 
   publicacionId = input.required<string>();
@@ -37,7 +37,7 @@ export class BloqueComentariosComponent {
     this.cargando.set(true);
     this.errorCarga.set(null);
 
-    this.publicacionesService.obtenerComentarios(this.publicacionId(), 0, 3).subscribe({
+    this.comentariosService.listar(this.publicacionId(), 0, 3).subscribe({
       next: (res) => {
         this.comentarios.set(res.items);
         this.cargando.set(false);

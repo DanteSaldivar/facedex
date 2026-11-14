@@ -11,6 +11,31 @@
   font-family: var(--font-hand);
   font-size: 1.05rem;
   color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-label-textarea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+
+  .etiqueta-manga {
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+  }
+
+  .contador-caracteres {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--screentone);
+
+    &.limite-cercano {
+      color: var(--accent);
+    }
+  }
 }
 
 .manga-input {
@@ -49,5 +74,20 @@
   .onomatopoeia-mini {
     font-family: var(--font-title);
     color: var(--accent-2);
+  }
+}
+
+:host-context(.panel-manga-registro) {
+  .manga-field-group {
+    gap: 0.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .manga-label {
+    font-size: 0.95rem;
+  }
+
+  .manga-input {
+    padding: 0.4rem 0.75rem;
   }
 }

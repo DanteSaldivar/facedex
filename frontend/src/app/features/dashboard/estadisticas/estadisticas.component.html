@@ -1,0 +1,243 @@
+<div class="contenedor-dashboard-estadisticas">
+  <header class="encabezado-dashboard">
+    <div>
+      <h1 class="titulo-manga">MÉTRICAS Y ESTADÍSTICAS</h1>
+      <p class="subtitulo-manga">Rendimiento de la comunidad FaceDex</p>
+    </div>
+  </header>
+
+  <!-- Requisito 14: Selector de Lapso -->
+  <form [formGroup]="formFiltro" (ngSubmit)="aplicarFiltro()" class="panel-manga-filtro">
+    <div class="campo-fecha">
+      <label for="fechaDesde">Desde:*</label>
+      <input id="fechaDesde" type="date" formControlName="desde" class="input-fecha-manga" />
+    </div>
+
+    <div class="campo-fecha">
+      <label for="fechaHasta">Hasta:*</label>
+      <input id="fechaHasta" type="date" formControlName="hasta" class="input-fecha-manga" />
+    </div>
+
+    <app-button type="submit" variant="primario" [disabled]="formFiltro.invalid || cargando()" appResaltar>
+      <i class="fa-solid fa-bolt" aria-hidden="true"></i> APLICAR FILTRO
+    </app-button>
+  </form>
+
+  @if (cargando()) {
+  <div class="caja-cargando">
+    <app-spinner tamano="lg" mensaje="Calculando estadísticas manga..."></app-spinner>
+  </div>
+  } @else {
+  <!-- Requisito 15 y 16: Grilla Responsive de Gráficos -->
+  <div class="grilla-graficos-manga">
+
+    <!-- Panel 1: Barras -->
+    <section class="panel-grafico-viñeta" appResaltar aria-label="Gráfico de publicaciones por usuario"
+      (click)="abrirGrafico('publicaciones')" role="button" tabindex="0" (keydown.enter)="abrirGrafico('publicaciones')"
+      (keydown.space)="$event.preventDefault(); abrirGrafico('publicaciones')"
+      aria-label="Ampliar gráfico de publicaciones por usuario">
+      <header class="header-grafico">
+        <h3>PUBLICACIONES POR USUARIO</h3>
+        <span class="badge-total">TOTAL: {{ totalPublicaciones() }}</span>
+      </header>
+
+      <div class="caja-canvas">
+        @if (barChartData.labels?.length) {
+        <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
+        } @else {
+        <div class="sin-datos">
+          <span class="onomatopoeia-mini">¡VACÍO!</span>
+          <p>Sin datos en este lapso</p>
+        </div>
+        }
+      </div>
+    </section>
+
+    <!-- Panel 2: Líneas -->
+    <section class="panel-grafico-viñeta" appResaltar aria-label="Gráfico de comentarios por día"
+      (click)="abrirGrafico('comentarios-dia')" role="button" tabindex="0"
+      (keydown.enter)="abrirGrafico('comentarios-dia')"
+      (keydown.space)="$event.preventDefault(); abrirGrafico('comentarios-dia')"
+      aria-label="Ampliar gráfico de comentarios por día">
+      <header class="header-grafico">
+        <h3>COMENTARIOS POR DÍA</h3>
+        <span class="badge-total">TOTAL: {{ totalComentariosDia() }}</span>
+      </header>
+
+      <div class="caja-canvas">
+        @if (lineChartData.labels?.length) {
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType"></canvas>
+        } @else {
+        <div class="sin-datos">
+          <span class="onomatopoeia-mini">¡VACÍO!</span>
+          <p>Sin datos en este lapso</p>
+        </div>
+        }
+      </div>
+    </section>
+
+    <!-- Panel 3: Dona -->
+    <section class="panel-grafico-viñeta" appResaltar aria-label="Gráfico de comentarios por publicación"
+      (click)="abrirGrafico('comentarios-publicacion')" role="button" tabindex="0"
+      (keydown.enter)="abrirGrafico('comentarios-publicacion')"
+      (keydown.space)="$event.preventDefault(); abrirGrafico('comentarios-publicacion')"
+      aria-label="Ampliar gráfico de comentarios por publicación">
+      <header class="header-grafico">
+        <h3>TOP PUBLICACIONES COMENTADAS</h3>
+        <span class="badge-total">TOTAL: {{ totalComentariosPub() }}</span>
+      </header>
+
+      <div class="caja-canvas">
+        @if (doughnutChartData.labels?.length) {
+        <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions"
+          [type]="doughnutChartType"></canvas>
+        } @else {
+        <div class="sin-datos">
+          <span class="onomatopoeia-mini">¡VACÍO!</span>
+          <p>Sin datos en este lapso</p>
+        </div>
+        }
+      </div>
+    </section>
+
+  </div>
+  }
+</div>
+
+
+@if (graficoSeleccionado(); as grafico) {
+<div class="overlay-grafico-manga" (click)="cerrarGrafico()" (keydown.escape)="cerrarGrafico()">
+
+  <section class="panel-grafico-ampliado" role="dialog" aria-modal="true" aria-labelledby="titulo-grafico-ampliado"
+    (click)="$event.stopPropagation()">
+
+    <header class="header-grafico-ampliado">
+      <div>
+        @if (grafico === 'publicaciones') {
+        <h2 id="titulo-grafico-ampliado">PUBLICACIONES POR USUARIO</h2>
+        <span class="badge-total">TOTAL: {{ totalPublicaciones() }}</span>
+        } @else if (grafico === 'comentarios-dia') {
+        <h2 id="titulo-grafico-ampliado">COMENTARIOS POR DÍA</h2>
+        <span class="badge-total">TOTAL: {{ totalComentariosDia() }}</span>
+        } @else {
+        <h2 id="titulo-grafico-ampliado">TOP PUBLICACIONES COMENTADAS</h2>
+        <span class="badge-total">TOTAL: {{ totalComentariosPub() }}</span>
+        }
+      </div>
+
+      <button type="button" class="btn-cerrar-grafico" (click)="cerrarGrafico()" aria-label="Cerrar gráfico ampliado">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <!-- Gráfico ampliado -->
+    <div class="canvas-ampliado">
+
+      @if (grafico === 'publicaciones') {
+      @if (barChartData.labels?.length) {
+      <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType">
+      </canvas>
+      } @else {
+      <div class="sin-datos">
+        <span class="onomatopoeia-mini">¡VACÍO!</span>
+        <p>Sin datos en este lapso</p>
+      </div>
+      }
+      }
+
+      @else if (grafico === 'comentarios-dia') {
+      @if (lineChartData.labels?.length) {
+      <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType">
+      </canvas>
+      } @else {
+      <div class="sin-datos">
+        <span class="onomatopoeia-mini">¡VACÍO!</span>
+        <p>Sin datos en este lapso</p>
+      </div>
+      }
+      }
+
+      @else {
+      @if (doughnutChartData.labels?.length) {
+      <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions" [type]="doughnutChartType">
+      </canvas>
+      } @else {
+      <div class="sin-datos">
+        <span class="onomatopoeia-mini">¡VACÍO!</span>
+        <p>Sin datos en este lapso</p>
+      </div>
+      }
+      }
+
+    </div>
+
+    <!-- Explicación del gráfico -->
+    <div class="explicacion-grafico">
+      <h3>
+        <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+        ¿QUÉ ESTÁS VIENDO?
+      </h3>
+
+      @if (grafico === 'publicaciones') {
+      <p>
+        Este gráfico muestra cuántas publicaciones realizó cada usuario
+        durante el período seleccionado.
+      </p>
+      <p>
+        <strong>¿Cómo interpretarlo?</strong>
+        Cada barra representa un usuario. Cuanto más alta sea la barra,
+        mayor será la cantidad de publicaciones realizadas por esa persona.
+      </p>
+      <p>
+        <strong>¿Para qué sirve?</strong>
+        Permite identificar a los usuarios más activos en la creación
+        de contenido y comparar su participación dentro de la comunidad.
+      </p>
+      }
+
+      @else if (grafico === 'comentarios-dia') {
+      <p>
+        Este gráfico muestra la cantidad de comentarios realizados
+        en cada día del período seleccionado.
+      </p>
+      <p>
+        <strong>¿Cómo interpretarlo?</strong>
+        Cada punto representa un día. La altura indica cuántos comentarios
+        se realizaron. Los picos muestran los días con mayor actividad.
+      </p>
+      <p>
+        <strong>¿Para qué sirve?</strong>
+        Permite observar cuándo participa más la comunidad y detectar
+        aumentos o disminuciones en la interacción.
+      </p>
+      }
+
+      @else {
+      <p>
+        Este gráfico compara las publicaciones que recibieron más comentarios.
+        Se muestran las cinco publicaciones destacadas del período.
+      </p>
+      <p>
+        <strong>¿Cómo interpretarlo?</strong>
+        Cada segmento de la dona representa una publicación.
+        El tamaño del segmento indica su cantidad de comentarios.
+      </p>
+      <p>
+        <strong>¿Para qué sirve?</strong>
+        Permite identificar qué contenidos generan más conversación
+        e interacción entre los usuarios.
+      </p>
+      }
+    </div>
+
+    <footer class="footer-grafico-ampliado">
+      <span>DATOS DEL PERÍODO SELECCIONADO</span>
+      <button type="button" class="btn-volver-grafico" (click)="cerrarGrafico()">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        VOLVER
+      </button>
+    </footer>
+
+  </section>
+</div>
+}

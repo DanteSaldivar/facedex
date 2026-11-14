@@ -14,6 +14,7 @@ export class ButtonComponent {
   type = input<'button' | 'submit' | 'reset'>('button');
   disabled = input(false);
   block = input(false);
+  compacto = input(false);
 
   onClick = output<MouseEvent>();
 }

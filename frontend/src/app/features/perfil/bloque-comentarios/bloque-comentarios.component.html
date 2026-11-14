@@ -5,9 +5,14 @@
     class="boton-desplegar-comentarios"
     (click)="toggleDesplegar()"
     [attr.aria-expanded]="desplegado()">
-    <span>💬 {{ desplegado() ? 'OCULTAR COMENTARIOS' : 'VER COMENTARIOS' }}</span>
+    <span>
+      <i class="fa-regular fa-comment" aria-hidden="true"></i>
+      {{ desplegado() ? 'OCULTAR COMENTARIOS' : 'VER COMENTARIOS' }}
+    </span>
     <span class="badge-count">({{ totalComentariosInicial() }})</span>
-    <span class="flecha">{{ desplegado() ? '▲' : '▼' }}</span>
+    <span class="flecha">
+      <i [class]="desplegado() ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" aria-hidden="true"></i>
+    </span>
   </button>
 
   <!-- Bloque Desplegado -->
@@ -19,11 +24,11 @@
         </div>
       } @else if (errorCarga()) {
         <div class="error-comentarios">
-          ⚠️ {{ errorCarga() }}
+          <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> {{ errorCarga() }}
         </div>
       } @else if (comentarios().length === 0) {
         <div class="sin-comentarios">
-          <span>🗯️ Aún no hay comentarios en esta viñeta.</span>
+          <span><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Aún no hay comentarios en esta viñeta.</span>
         </div>
       } @else {
         <div class="lista-globos">

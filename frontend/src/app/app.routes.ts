@@ -1,11 +1,19 @@
 import { Routes } from '@angular/router';
-import { authGuard, publicoGuard } from './core/guards/auth-guard';
+import { adminGuard } from './core/guards/admin.guard';
+import { authGuard, publicoGuard } from './core/guards/auth.guard';
 
- export const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'publicaciones',
+    redirectTo: 'cargando',
     pathMatch: 'full'
+  },
+  {
+    path: 'cargando',
+    loadComponent: () =>
+      import('./features/cargando/cargando.component').then(
+        m => m.CargandoComponent
+      )
   },
 
   // 2. Ruta pública: Login
@@ -37,8 +45,17 @@ import { authGuard, publicoGuard } from './core/guards/auth-guard';
         m => m.PublicacionesComponent
       )
   },
+  //5. Ruta privada: detalle publicacion
+  {
+    path: 'publicaciones/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/publicaciones/detalle-publicaciones/detalle-publicaciones.component').then(
+        m => m.DetallePublicacionesComponent
+      )
+  },
 
-  // 5. Ruta privada: Mi Perfil 
+  // 6. Ruta privada: Mi Perfil 
   {
     path: 'perfil',
     canActivate: [authGuard],
@@ -47,8 +64,23 @@ import { authGuard, publicoGuard } from './core/guards/auth-guard';
         m => m.PerfilComponent
       )
   },
-
-  // 6. Ruta de Error 404 perso
+  {
+  path: 'dashboard/usuarios',
+  canActivate: [authGuard, adminGuard],
+  loadComponent: () =>
+    import('./features/dashboard/usuarios/usuarios.component').then(
+      m => m.UsuariosComponent
+    )
+},
+{
+  path: 'dashboard/estadisticas',
+  canActivate: [authGuard, adminGuard],
+  loadComponent: () =>
+    import('./features/dashboard/estadisticas/estadisticas.component').then(
+      m => m.EstadisticasComponent
+    )
+},
+  // 7. Ruta de Error 404 perso
   {
     path: '404',
     loadComponent: () =>

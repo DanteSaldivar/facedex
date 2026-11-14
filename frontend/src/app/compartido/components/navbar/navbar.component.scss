@@ -1,4 +1,5 @@
 @use '../../../../styles/mixin.scss' as *;
+
 .navbar-manga {
   background-color: var(--paper);
   border-bottom: 4px solid var(--ink);
@@ -35,7 +36,8 @@
     padding: 0.2rem 0.5rem;
     transition: transform 0.1s ease;
 
-    &:hover, &.activo {
+    &:hover,
+    &.activo {
       color: var(--accent);
       transform: translateY(-2px);
     }
@@ -60,7 +62,8 @@
     display: flex;
   }
 
-  .boton-modo-tinta, .boton-salir {
+  .boton-modo-tinta,
+  .boton-salir {
     @include manga-panel;
     @include manga-button-hover;
     font-family: var(--font-title);
@@ -122,5 +125,14 @@
       background-color: var(--accent);
       color: #ffffff;
     }
+  }
+
+  .link-admin {
+    background-color: var(--accent-2);
+    color: var(--ink);
+    font-weight: 800;
+    padding: 0.3rem 0.6rem;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0px var(--ink);
   }
 }
