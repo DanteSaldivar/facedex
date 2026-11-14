@@ -49,7 +49,11 @@ export class AuthService {
   }
 
   autorizar(): Observable<RespuestaSesion> {
-    return this.http.post<RespuestaSesion>(`${this.apiUrl}/auth/autorizar`, {}).pipe(
+    return this.http.post<RespuestaSesion>(
+      `${this.apiUrl}/auth/autorizar`,
+      {},
+      { withCredentials: true }
+    ).pipe(
       tap(res => this.establecerSesion(res))
     );
   }

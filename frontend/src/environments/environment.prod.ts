@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://facedex.onrender.com/api',
   avisoSesionAntesDeVencerMs: 5 * 60 * 1000
 };
