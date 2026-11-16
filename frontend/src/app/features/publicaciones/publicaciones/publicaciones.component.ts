@@ -8,11 +8,11 @@ import { EsqueletoPublicacionComponent } from '../../../compartido/components/es
 import { PublicacionComponent } from '../../../compartido/components/publicacion/publicacion.component';
 import { ButtonComponent } from '../../../compartido/components/button/button.component';
 import { ModalCrearPublicacionComponent } from '../modal-crear-publicaciones/modal-crear-publicaciones.component';
-import { SpinnerComponent } from '../../../compartido/components/spinner/spinner.component';
+
 
 
 @Component({
-  imports: [EsqueletoPublicacionComponent, PublicacionComponent, ButtonComponent, ModalCrearPublicacionComponent, SpinnerComponent],
+  imports: [EsqueletoPublicacionComponent, PublicacionComponent, ButtonComponent, ModalCrearPublicacionComponent],
   selector: 'app-publicaciones',
   styleUrl: './publicaciones.component.scss',
   templateUrl: './publicaciones.component.html',

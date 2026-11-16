@@ -6,6 +6,8 @@ import { InputComponent } from '../../../compartido/components/input/input.compo
 import { ButtonComponent } from '../../../compartido/components/button/button.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { manejarErrorAutenticacion } from '../../utils/manejador-errores-auth';
+import { SpinnerComponent } from '../../../compartido/components/spinner/spinner.component';
+import { CargandoComponent } from '../../cargando/cargando.component';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink, InputComponent, ButtonComponent],
