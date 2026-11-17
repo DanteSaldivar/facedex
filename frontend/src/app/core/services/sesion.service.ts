@@ -30,6 +30,11 @@ export class SesionService {
     const tiempoAvisoMs = environment.avisoSesionAntesDeVencerMs; // 5 minutos por defecto
     const tiempoHastaAviso = tiempoRestanteMs - tiempoAvisoMs;
 
+    console.log(
+      `[SesionService] Sesión vence en ${Math.round(tiempoRestanteMs / 1000)}s. ` +
+      `Aviso programado en ${Math.round(tiempoHastaAviso / 1000)}s.`
+    );
+
     // 1. Programar Expiración Real
     this.timerExpiracionReal = setTimeout(() => {
       this.ejecutarExpiracionSesion();

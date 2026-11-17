@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, Injector, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { RespuestaSesion, Usuario } from '../models/usuario.model';
 import { catchError, Observable, of, tap } from 'rxjs';
+import { SesionService } from './sesion.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class AuthService {
 
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
+  private injector = inject(Injector);
 
   readonly usuarioActual = signal<Usuario | null>(null);
   readonly expiraEn = signal<number | null>(null);
@@ -29,6 +31,7 @@ export class AuthService {
   establecerSesion(res: RespuestaSesion): void {
     this.usuarioActual.set(res.usuario);
     this.expiraEn.set(res.expiraEn);
+    this.injector.get(SesionService).iniciarControlSesion(res.expiraEn);
   }
 
   limpiarEstadoMemoria(): void {
