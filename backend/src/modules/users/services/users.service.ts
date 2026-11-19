@@ -6,6 +6,7 @@ import { User, UserDocument } from '../schemas/user.schema.js';
 import { CloudinaryService } from '../../../common/services/cloudinary/cloudinary.service.js';
 import { CrearUsuarioAdminDto } from '../dto/crear-usuario-admin.dto.js';
 import { QueryUsuariosDto } from '../dto/query-usuarios.dto.js';
+import { EditarPerfilDto } from '../dto/editar-perfil.dto.js';
 
 @Injectable()
 export class UsersService {
@@ -219,5 +220,108 @@ export class UsersService {
             message: 'Usuario habilitado correctamente',
             usuario: usuario.toJSON(),
         };
+    }
+
+
+    async editarPerfil(
+        usuarioId: string,
+        dto: EditarPerfilDto,
+        file?: Express.Multer.File,
+    ) {
+        const usuario = await this.userModel.findById(usuarioId);
+        if (!usuario) {
+            throw new NotFoundException({
+                statusCode: 404,
+                message: 'Usuario no encontrado',
+                error: 'Not Found',
+            });
+        }
+
+        // Validar fecha de nacimiento no futura
+        if (dto.fechaNacimiento !== undefined) {
+            const fechaNac = new Date(dto.fechaNacimiento);
+            if (fechaNac > new Date()) {
+                throw new BadRequestException({
+                    statusCode: 400,
+                    message: ['La fecha de nacimiento no puede ser futura'],
+                    error: 'Bad Request',
+                });
+            }
+            usuario.fechaNacimiento = fechaNac;
+        }
+
+        //  Validar unicidad de correo (excluyendo al propio usuario)
+        if (dto.correo !== undefined) {
+            const correoNormalizado = dto.correo.trim().toLowerCase();
+            const correoActual = usuario.correo?.trim().toLowerCase() ?? '';
+
+            if (correoNormalizado !== correoActual) {
+                const correoEnUso = await this.userModel.findOne({
+                    correo: correoNormalizado,
+                    _id: { $ne: usuario._id },
+                });
+                if (correoEnUso) {
+                    throw new ConflictException({
+                        statusCode: 409,
+                        message: 'El correo electrónico ya está en uso por otra cuenta',
+                        error: 'Conflict',
+                    });
+                }
+                usuario.correo = correoNormalizado;
+            }
+        }
+
+        // Validar unicidad de nombreUsuario 
+        if (dto.nombreUsuario !== undefined) {
+            const usernameNormalizado = dto.nombreUsuario.trim();
+
+            if (usernameNormalizado !== usuario.nombreUsuario) {
+                const usernameEnUso = await this.userModel.findOne({
+                    nombreUsuario: usernameNormalizado,
+                    _id: { $ne: usuario._id },
+                });
+
+                if (usernameEnUso) {
+                    throw new ConflictException({
+                        statusCode: 409,
+                        message: 'El nombre de usuario ya está en uso por otra cuenta',
+                        error: 'Conflict',
+                    });
+                }
+
+                usuario.nombreUsuario = usernameNormalizado;
+            }
+        }
+
+        //  Actualizar campos de texto si fueron enviados
+        if (dto.nombre !== undefined) usuario.nombre = dto.nombre.trim();
+        if (dto.apellido !== undefined) usuario.apellido = dto.apellido.trim();
+        if (dto.descripcion !== undefined) usuario.descripcion = dto.descripcion.trim();
+
+        //  Subir nueva foto de perfil a Cloudinary si se adjuntó archivo
+        let imagenPerfil = '';
+        if (file) {
+            const nuevaImagenUrl = await this.cloudinaryService.subirImagen(file, 'usuarios');
+            imagenPerfil = nuevaImagenUrl.url;
+            usuario.imagenPerfil = imagenPerfil;
+        }
+
+        try {
+            await usuario.save();
+            return {
+                message: 'Perfil actualizado correctamente',
+                usuario: usuario.toJSON(),
+            };
+        } catch (error: any) {
+            if (error.code === 11000) {
+                const campoRepetido = Object.keys(error.keyPattern || {})[0] || 'campo';
+                throw new ConflictException({
+                    statusCode: 409,
+                    message: `El ${campoRepetido} ya se encuentra registrado`,
+                    error: 'Conflict',
+                });
+            }
+            throw error;
+        }
     }
 }

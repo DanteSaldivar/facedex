@@ -1,0 +1,100 @@
+@use "../../../styles/mixin.scss" as *;
+
+.contenedor-error-401 {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+}
+
+.panel-manga-401 {
+  @include manga-panel;
+  background-color: var(--paper);
+  max-width: 520px;
+  width: 100%;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 10px 10px 0px var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+
+  .onomatopoeia {
+    font-size: 2.4rem;
+  }
+
+  .titulo-401 {
+    font-family: var(--font-title);
+    font-size: 2rem;
+    margin: 0;
+    color: var(--accent);
+  }
+
+  .texto-explicativo {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .acciones-401 {
+    margin-top: 0.75rem;
+  }
+}
+
+.mascota-kuro-chan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem 0;
+
+  .orejas-kuro {
+    display: flex;
+    gap: 2.2rem;
+    margin-bottom: -6px;
+
+    span {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 18px solid var(--ink);
+    }
+  }
+
+  .cara-kuro {
+    width: 84px;
+    height: 72px;
+    background-color: var(--ink);
+    color: var(--paper);
+    border-radius: 50% 50% 45% 45%;
+    border: 3px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 0px var(--accent-2);
+
+    .ojos {
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--accent-2);
+    }
+
+    .boca {
+      font-weight: 900;
+      font-size: 1.1rem;
+      line-height: 0.8;
+    }
+  }
+
+  .etiqueta-kuro {
+    margin-top: 0.45rem;
+    font-family: var(--font-hand);
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+}

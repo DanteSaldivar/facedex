@@ -1,0 +1,30 @@
+<main class="contenedor-error-401">
+  <section class="panel-manga-401" aria-labelledby="titulo-401">
+    <span class="onomatopoeia">¡GASP!</span>
+
+    <div class="mascota-kuro-chan" role="img" aria-label="Mascota Kuro-chan de FaceDex sorprendida">
+      <div class="orejas-kuro">
+        <span></span>
+        <span></span>
+      </div>
+      <div class="cara-kuro">
+        <span class="ojos">✖ &nbsp; ✖</span>
+        <span class="boca">︵</span>
+      </div>
+      <span class="etiqueta-kuro">KURO-CHAN</span>
+    </div>
+
+    <h1 id="titulo-401" class="titulo-401">Error 401: tu sesión expiró</h1>
+
+    <p class="texto-explicativo">
+      El tiempo de tu sesión en <strong>FaceDex</strong> llegó a su fin sin renovarse.
+      Para seguir leyendo y publicando, necesitás identificarte nuevamente.
+    </p>
+
+    <div class="acciones-401">
+      <app-button variant="primario" (onClick)="volverALogin()">
+        <i class="fa-solid fa-key" aria-hidden="true"></i> Volver a iniciar sesión
+      </app-button>
+    </div>
+  </section>
+</main>

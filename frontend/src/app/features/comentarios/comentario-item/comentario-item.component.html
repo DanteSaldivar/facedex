@@ -11,7 +11,7 @@
             }
         </div>
 
-        @if (esAutor && !modoLectura && !modoEdicion()) {
+        @if (esAutor && !modoLectura() && !modoEdicion()) {
         <button type="button" class="btn-editar-comentario" (click)="activarEdicion()" aria-label="Editar comentario">
             <i class="fa-solid fa-pen" aria-hidden="true"></i> Editar
         </button>

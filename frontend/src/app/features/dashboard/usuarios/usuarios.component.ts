@@ -209,7 +209,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     if (this.archivoFotoSeleccionado()) {
-      formData.append('imagenPerfil', this.archivoFotoSeleccionado()!);
+      formData.append('imagen', this.archivoFotoSeleccionado()!);
     }
 
     this.usuariosService.crear(formData).subscribe({

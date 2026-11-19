@@ -6,9 +6,7 @@ import { InputComponent } from '../../../compartido/components/input/input.compo
 import { ButtonComponent } from '../../../compartido/components/button/button.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { manejarErrorAutenticacion } from '../../utils/manejador-errores-auth';
-import { SpinnerComponent } from '../../../compartido/components/spinner/spinner.component';
-import { CargandoComponent } from '../../cargando/cargando.component';
-
+import { environment } from '../../../../environments/environment';
 @Component({
   imports: [ReactiveFormsModule, RouterLink, InputComponent, ButtonComponent],
   selector: 'app-login',
@@ -23,6 +21,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
 
   cargando = signal<boolean>(false);
+  readonly mostrarAccesoRapido = environment.mostrarAccesoRapido;
 
   // Validación de contraseña: min 8 caracteres, 1 mayúscula, 1 número
   formularioLogin = this.fb.nonNullable.group({
@@ -33,6 +32,18 @@ export class LoginComponent {
       Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)
     ]]
   });
+
+  entrarRapido(rol: 'usuario' | 'admin'): void {
+    if (this.cargando() || !this.mostrarAccesoRapido) return;
+
+    const cuenta = environment.accesoRapido[rol];
+    this.formularioLogin.patchValue({
+      usuarioOCorreo: cuenta.identificador,
+      contrasena: cuenta.password
+    });
+
+    this.alEnviar();
+  }
 
   esCampoInvalido(nombreCampo: 'usuarioOCorreo' | 'contrasena'): boolean {
     const campo = this.formularioLogin.get(nombreCampo);

@@ -1,42 +1,72 @@
 <div class="contenedor-perfil-manga">
+  @if (authService.usuarioActual(); as usuario) {
   <div class="panel-tarjeta-perfil">
 
-    @if (usuario) {
     <!-- Encabezado con datos del Usuario -->
     <header class="header-perfil">
-      <app-avatar [imagenUrl]="usuario.imagenPerfil" [nombre]="usuario.nombreUsuario" [tamano]="100">
+      <app-avatar [imagenUrl]="usuario.imagenPerfil" [nombre]="usuario.nombreUsuario" [tamano]="135">
       </app-avatar>
 
       <div class="info-usuario-principal">
-        <span *appSoloAdmin class="badge-rol">{{ usuario.perfil | uppercase }}</span>
-        <h1 class="nombre-completo">{{ usuario.nombre }} {{ usuario.apellido }}</h1>
-        <h2 class="nombre-usuario">&#64;{{ usuario.nombreUsuario }}</h2>
+        <span *appSoloAdmin class="badge-rol">
+          {{ usuario.perfil | uppercase }}
+        </span>
+
+        <h1 class="nombre-completo">
+          {{ usuario.nombre }} {{ usuario.apellido }}
+        </h1>
+
+        <h2 class="nombre-usuario">
+          &#64;{{ usuario.nombreUsuario }}
+        </h2>
       </div>
+
+      <div class="acciones-header-perfil">
+        <app-button variant="secundario" (onClick)="abrirModalEditar()" appResaltar>
+          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+          EDITAR PERFIL
+        </app-button>
+      </div>
+
     </header>
 
     <!-- Grilla con datos detallados -->
     <div class="grilla-datos-perfil">
+
       <div class="item-dato">
-        <span class="etiqueta-dato"><i class="fa-solid fa-envelope" aria-hidden="true"></i> CORREO ELECTRÓNICO</span>
+        <span class="etiqueta-dato">
+          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          CORREO ELECTRÓNICO
+        </span>
         <span class="valor-dato">{{ usuario.correo }}</span>
       </div>
 
       <div class="item-dato">
-        <span class="etiqueta-dato"><i class="fa-solid fa-cake-candles" aria-hidden="true"></i> FECHA DE NACIMIENTO</span>
-        <span class="valor-dato">{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</span>
+        <span class="etiqueta-dato">
+          <i class="fa-solid fa-cake-candles" aria-hidden="true"></i>
+          FECHA DE NACIMIENTO
+        </span>
+        <span class="valor-dato">
+          {{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}
+        </span>
       </div>
 
       <div class="item-dato bloque-biografia">
-        <span class="etiqueta-dato"><i class="fa-solid fa-book-open" aria-hidden="true"></i> BIOGRAFÍA / DESCRIPCIÓN</span>
+        <span class="etiqueta-dato">
+          <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+          BIOGRAFÍA / DESCRIPCIÓN
+        </span>
+
         <p class="texto-biografia">
           {{ usuario.descripcion || 'Sin biografía especificada aún.' }}
         </p>
       </div>
+
     </div>
-    }
 
     <!-- Sección de Mis Últimas 3 Publicaciones -->
     <section class="seccion-ultimas-posts">
+
       <div class="titulo-seccion-posts">
         <span class="onomatopoeia">¡MY CHAPTERS!</span>
         <h2 class="subtitulo-manga">MIS ÚLTIMAS 3 PUBLICACIONES</h2>
@@ -48,28 +78,133 @@
         <app-publicacion-esqueleto></app-publicacion-esqueleto>
         }
       </div>
+
       } @else if (ultimasPublicaciones().length === 0) {
       <div class="sin-posts-perfil">
         <span class="onomatopoeia-mini">¡ZUUN!</span>
         <p>Todavía no realizaste ninguna publicación.</p>
       </div>
+
       } @else {
       <div class="grilla-posts-perfil">
+
         @for (pub of ultimasPublicaciones(); track pub._id) {
-        <app-publicacion [publicacion]="pub" [usuarioActual]="usuario" (eliminada)="alEliminarPublicacion($event)">
+        <div class="tarjeta-perfil-con-comentarios">
 
-          <!-- Proyección del Bloque de Comentarios Colapsables -->
-          <div slot="comentarios">
-            <h4 class="titulo-preview">ÚLTIMOS COMENTARIOS</h4>
-            <app-lista-comentarios [publicacionId]="pub._id" [modoLectura]="true" [limiteInicial]="3">
-            </app-lista-comentarios>
-          </div>
+          <app-publicacion [publicacion]="pub" [usuarioActual]="usuario" modo="feed"
+            (eliminada)="alEliminarPublicacion($event)">
+          </app-publicacion>
 
-        </app-publicacion>
+        </div>
         }
+
       </div>
       }
+
     </section>
 
   </div>
+  }
 </div>
+
+<!-- Modal de edición del perfil -->
+@if (mostrarModalEditar()) {
+<div class="overlay-modal-manga">
+  <div class="panel-manga-modal" role="dialog" aria-modal="true" aria-labelledby="tituloModalEditar">
+
+    <header class="header-modal">
+      <h2 id="tituloModalEditar">EDITAR MI PERFIL</h2>
+
+      <button type="button" class="btn-cerrar" (click)="cerrarModalEditar()" aria-label="Cerrar modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </header>
+
+    <form [formGroup]="formEditar" (ngSubmit)="guardarCambios()" class="form-modal-body">
+
+      <!-- Foto de perfil -->
+      <div class="seccion-foto-editar">
+
+        <div class="marco-avatar-preview">
+          @if (vistaPreviaFoto()) {
+          <img [src]="vistaPreviaFoto()" alt="Vista previa de perfil" class="img-preview" />
+          } @else {
+          <i class="fa-solid fa-user" aria-hidden="true"></i>
+          }
+        </div>
+
+        <label for="inputFotoEditar" class="btn-foto-manga">
+          <i class="fa-solid fa-camera" aria-hidden="true"></i>
+          Cambiar Foto de Perfil
+        </label>
+
+        <input id="inputFotoEditar" type="file" accept="image/jpeg,image/png,image/webp"
+          (change)="alSeleccionarFoto($event)" class="input-oculto" />
+
+        @if (errorArchivo()) {
+        <span class="error-archivo">{{ errorArchivo() }}</span>
+        }
+
+      </div>
+
+      <!-- Nombre y apellido -->
+      <div class="grilla-dos">
+
+        <app-input label="Nombre" formControlName="nombre" appAutofocus [isInvalid]="esCampoInvalido('nombre')"
+          [errorMessage]="obtenerMensajeError('nombre')">
+        </app-input>
+
+        <app-input label="Apellido" formControlName="apellido" [isInvalid]="esCampoInvalido('apellido')"
+          [errorMessage]="obtenerMensajeError('apellido')">
+        </app-input>
+
+        <app-input label="Correo electrónico" type="email" formControlName="correo"
+          [isInvalid]="esCampoInvalido('correo')" [errorMessage]="obtenerMensajeError('correo')">
+        </app-input>
+
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <app-input label="Fecha de Nacimiento" type="date" formControlName="fechaNacimiento"
+        [isInvalid]="esCampoInvalido('fechaNacimiento')" [errorMessage]="obtenerMensajeError('fechaNacimiento')">
+      </app-input>
+
+      <!-- Biografía -->
+      <div class="campo-textarea-manga">
+        <label for="bioEditar" class="etiqueta-manga">
+          Biografía / Descripción (Máx 200)
+        </label>
+
+        <textarea id="bioEditar" formControlName="descripcion" rows="3" class="textarea-manga"
+          placeholder="Contanos algo sobre vos...">
+          </textarea>
+
+        @if (esCampoInvalido('descripcion')) {
+        <span class="error-archivo">
+          {{ obtenerMensajeError('descripcion') }}
+        </span>
+        }
+      </div>
+
+      <!-- Acciones -->
+      <div class="acciones-modal">
+
+        <app-button type="button" variant="secundario" (onClick)="cerrarModalEditar()">
+          CANCELAR
+        </app-button>
+
+        <app-button type="submit" variant="primario" [disabled]="formEditar.invalid || guardandoPerfil()">
+          @if (guardandoPerfil()) {
+          GUARDANDO...
+          } @else {
+          <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+          GUARDAR CAMBIOS
+          }
+        </app-button>
+
+      </div>
+
+    </form>
+  </div>
+</div>
+}

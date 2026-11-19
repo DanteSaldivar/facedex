@@ -29,7 +29,7 @@
     </div>
 
     <!-- Botón Cargar Más -->
-    @if (!modoLectura && comentarios().length < total()) {
+    @if (!modoLectura() && comentarios().length < total()) {
       <div class="caja-cargar-mas">
         <app-button
           variant="secundario"

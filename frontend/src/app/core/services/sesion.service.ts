@@ -55,8 +55,8 @@ export class SesionService {
     this.avisoModalAbierto = true;
 
     const respuesta = await this.servicioModal.confirmar({
-      titulo: '¿EXTENDER SESIÓN?',
-      mensaje: 'Te quedan menos de 5 minutos de sesión en FaceDex. ¿Querés extender tu tiempo?',
+      titulo: 'TU SESIÓN ESTÁ POR VENCER!!',
+      mensaje: `Te quedan menos de 1 minuto de sesión en FaceDex. ¿Querés extender tu tiempo?`,
       tipo: 'confirmacion',
       onomatopeya: '¡WAIT!',
       textoConfirmar: '¡SÍ, EXTENDER!',
@@ -85,16 +85,7 @@ export class SesionService {
   private ejecutarExpiracionSesion(): void {
     this.cancelarTemporizadores();
     this.servicioModal.cerrarModalAbierto();
-    this.authService.limpiarEstadoMemoria();
-
-    this.servicioModal.abrir({
-      titulo: '¡SESIÓN EXPIRADA!',
-      mensaje: 'Tu sesión en FaceDex ha vencido. Por favor, volvé a iniciar sesión.',
-      tipo: 'error',
-      onomatopeya: '¡Zaps?!'
-    });
-
-    this.router.navigate(['/login']);
+    this.router.navigate(['/401']);
   }
 
   cancelarTemporizadores(): void {

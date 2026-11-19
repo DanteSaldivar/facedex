@@ -65,21 +65,21 @@ export const routes: Routes = [
       )
   },
   {
-  path: 'dashboard/usuarios',
-  canActivate: [authGuard, adminGuard],
-  loadComponent: () =>
-    import('./features/dashboard/usuarios/usuarios.component').then(
-      m => m.UsuariosComponent
-    )
-},
-{
-  path: 'dashboard/estadisticas',
-  canActivate: [authGuard, adminGuard],
-  loadComponent: () =>
-    import('./features/dashboard/estadisticas/estadisticas.component').then(
-      m => m.EstadisticasComponent
-    )
-},
+    path: 'dashboard/usuarios',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./features/dashboard/usuarios/usuarios.component').then(
+        m => m.UsuariosComponent
+      )
+  },
+  {
+    path: 'dashboard/estadisticas',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () =>
+      import('./features/dashboard/estadisticas/estadisticas.component').then(
+        m => m.EstadisticasComponent
+      )
+  },
   // 7. Ruta de Error 404 perso
   {
     path: '404',
@@ -89,7 +89,13 @@ export const routes: Routes = [
       )
   },
 
-  // 7. capturar cualquier URL inexistente y redirigir a 404
+  {
+    path: '401',
+    loadComponent: () =>
+      import('./features/pagina 401/error401.component').then(m => m.Error401Component)
+  },
+
+  // 9. capturar cualquier URL inexistente y redirigir a 404
   {
     path: '**',
     redirectTo: '404'

@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, EventEmitter, inject, input, output, signal } from '@angular/core';
 import { PublicacionesService } from '../../../core/services/publicaciones.service';
 import { ModalService } from '../../services/modal.service';
 import { Publicacion } from '../../../core/models/publicacion.model';
@@ -36,12 +36,9 @@ export class PublicacionComponent {
 
 
   constructor() {
-    // Sincronizamos la entrada inicial con el estado local
-    const effectRef = () => {
+    effect(() => {
       this.publicacionLocal.set(this.publicacion());
-    };
-    // Sincronizar inmediatamente al instanciar
-    setTimeout(() => effectRef(), 0);
+    });
   }
 
   // Getter helper para tener siempre el estado actualizado de la publicación

@@ -120,11 +120,11 @@
 .panel-manga-modal {
   @include manga-panel;
   background-color: var(--paper);
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
+  width: 95%;
+  max-width: 720px;
+  max-height: 95vh;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   box-shadow: 10px 10px 0px var(--ink);
 
   .header-modal {
@@ -132,11 +132,12 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 3px solid var(--ink);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.6rem;
 
     h2 {
       font-family: var(--font-title);
+      font-size: 1.5rem;
     }
 
     .btn-cerrar {
@@ -148,11 +149,13 @@
   }
 }
 
+
 .grilla-dos {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 0.5rem 1rem;
 }
+
 
 .campo-radio-perfil {
   margin-bottom: 1rem;
@@ -167,6 +170,28 @@
     gap: 1.5rem;
     margin-top: 0.35rem;
     font-weight: 700;
+  }
+}
+
+.seccion-foto-editar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.6rem;
+
+  .marco-avatar-preview {
+    width: 65px;
+    height: 65px;
+  }
+}
+
+.campo-textarea-manga {
+  margin-bottom: 0.5rem;
+
+  textarea {
+    padding: 0.4rem 0.6rem;
+    resize: none;
   }
 }
 
@@ -196,5 +221,5 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
-  margin-top: 1.25rem;
+  margin-top: 0.6rem;
 }

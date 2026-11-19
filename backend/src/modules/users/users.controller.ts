@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFile, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Delete, Body, Param, Query, UseGuards, UseInterceptors, UploadedFile, HttpCode, HttpStatus } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
 import { QueryUsuariosDto } from './dto/query-usuarios.dto.js';
@@ -9,20 +9,22 @@ import { Roles } from '../../common/decoradores/roles.decotor.js';
 import { UsersService } from './services/users.service.js';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-objet-id/parse-objet-id.pipe.js';
 import { UsuarioActual } from '../../common/decoradores/usuario-actual.decorator.js';
+import { EditarPerfilDto } from './dto/editar-perfil.dto.js';
 
 
 @Controller('usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles('administrador') // Todas las rutas exclusivas para Admin
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
     @Get()
+    @Roles('administrador')
     async listar(@Query() queryDto: QueryUsuariosDto) {
         return this.usersService.listar(queryDto);
     }
 
     @Post()
+    @Roles('administrador')
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(FileInterceptor('imagen'))
     async crear(
@@ -33,6 +35,7 @@ export class UsersController {
     }
 
     @Delete(':id')
+    @Roles('administrador')
     async deshabilitar(
         @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
         @UsuarioActual('id') adminId: string,
@@ -41,8 +44,20 @@ export class UsersController {
     }
 
     @Post(':id/habilitar')
+    @Roles('administrador')
     @HttpCode(HttpStatus.OK)
     async habilitar(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
         return this.usersService.habilitarUsuario(id);
+    }
+
+    @Patch('perfil')
+    @HttpCode(HttpStatus.OK)
+    @UseInterceptors(FileInterceptor('imagen'))
+    async editarPerfil(
+        @UsuarioActual('id') usuarioId: string,
+        @Body() dto: EditarPerfilDto,
+        @UploadedFile() file?: Express.Multer.File,
+    ) {
+        return this.usersService.editarPerfil(usuarioId, dto, file);
     }
 }

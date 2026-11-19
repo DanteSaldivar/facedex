@@ -6,34 +6,42 @@
     </div>
 
     <form [formGroup]="formularioLogin" (ngSubmit)="alEnviar()">
-      <app-input
-        label="Usuario o Correo Electrónico"
-        placeholder="Ej: kuro_san o kuro@manga.com"
-        formControlName="usuarioOCorreo"
-        [isInvalid]="esCampoInvalido('usuarioOCorreo')"
+      <app-input label="Usuario o Correo Electrónico" placeholder="Ej: kuro_san o kuro@manga.com"
+        formControlName="usuarioOCorreo" [isInvalid]="esCampoInvalido('usuarioOCorreo')"
         [errorMessage]="obtenerMensajeError('usuarioOCorreo')">
       </app-input>
 
-      <app-input
-        label="Contraseña"
-        type="password"
-        placeholder="••••••••"
-        formControlName="contrasena"
-        [isInvalid]="esCampoInvalido('contrasena')"
-        [errorMessage]="obtenerMensajeError('contrasena')">
+      <app-input label="Contraseña" type="password" placeholder="••••••••" formControlName="contrasena"
+        [isInvalid]="esCampoInvalido('contrasena')" [errorMessage]="obtenerMensajeError('contrasena')">
       </app-input>
 
       <div class="acciones-formulario">
         <app-button type="submit" variant="primario" [block]="true" [disabled]="cargando()">
           @if (cargando()) {
-            ¡ENTRANDO...!
+          ¡ENTRANDO...!
           } @else {
-            ¡INGRESAR!
-            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          ¡INGRESAR!
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
           }
         </app-button>
       </div>
     </form>
+    @if (mostrarAccesoRapido) {
+    <div class="bloque-acceso-rapido" aria-label="Acceso rápido de prueba">
+      <span class="etiqueta-prueba">Acceso rápido de prueba</span>
+      <div class="botones-rapidos">
+        <app-button type="button" variant="secundario" [disabled]="cargando()" (onClick)="entrarRapido('usuario')"
+          appResaltar>
+          <i class="fa-solid fa-user" aria-hidden="true"></i> Entrar como usuario
+        </app-button>
+
+        <app-button type="button" variant="secundario" [disabled]="cargando()" (onClick)="entrarRapido('admin')"
+          appResaltar>
+          <i class="fa-solid fa-crown" aria-hidden="true"></i> Entrar como administrador
+        </app-button>
+      </div>
+    </div>
+    }
 
     <div class="pie-tarjeta">
       <p>¿Todavía no tenés cuenta? <a routerLink="/registro" class="enlace-manga">Registrate acá</a></p>

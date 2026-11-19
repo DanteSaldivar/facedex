@@ -18,3 +18,8 @@ export interface RespuestaSesion {
   usuario: Usuario;
   expiraEn: number; // Epoc ms (ej: Date.now() + 900000)
 }
+
+export interface RespuestaActualizarPerfil {
+  message: string;
+  usuario: Usuario;
+}

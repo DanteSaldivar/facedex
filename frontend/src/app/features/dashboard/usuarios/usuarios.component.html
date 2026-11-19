@@ -13,152 +13,160 @@
 
   <!-- Buscador -->
   <div class="barra-busqueda-manga">
-    <input
-      #inputBusqueda
-      type="text"
-      placeholder="Buscar por usuario, correo o nombre..."
-      class="input-busqueda-manga"
-      appAutofocus
-      (keyup.enter)="alBuscar(inputBusqueda.value)" />
+    <input #inputBusqueda type="text" placeholder="Buscar por usuario, correo o nombre..." class="input-busqueda-manga"
+      appAutofocus (keyup.enter)="alBuscar(inputBusqueda.value)" />
     <app-button variant="secundario" (onClick)="alBuscar(inputBusqueda.value)">
       <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> BUSCAR
     </app-button>
   </div>
 
   @if (cargando()) {
-    <div class="caja-cargando">
-      <app-spinner tamano="lg" mensaje="Cargando catálogo de usuarios..."></app-spinner>
-    </div>
+  <div class="caja-cargando">
+    <app-spinner tamano="lg" mensaje="Cargando catálogo de usuarios..."></app-spinner>
+  </div>
   } @else if (usuarios().length === 0) {
-    <div class="panel-vacio-manga">
-      <span class="onomatopoeia">¡SILENCIO!</span>
-      <p>No se encontraron usuarios coincidentes.</p>
-    </div>
+  <div class="panel-vacio-manga">
+    <span class="onomatopoeia">¡SILENCIO!</span>
+    <p>No se encontraron usuarios coincidentes.</p>
+  </div>
   } @else {
-    <!-- Tabla Manga -->
-    <div class="contenedor-tabla-responsive">
-      <table class="tabla-manga">
-        <thead>
-          <tr>
-            <th>AVATAR</th>
-            <th>NOMBRE COMPLETO</th>
-            <th>USUARIO</th>
-            <th>CORREO</th>
-            <th>PERFIL</th>
-            <th>ESTADO</th>
-            <th>ACCIÓN</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (u of usuarios(); track u._id) {
-            <tr>
-              <td>
-                <app-avatar [imagenUrl]="u.imagenPerfil" [nombre]="u.nombre" [apellido]="u.apellido" [tamano]="42"></app-avatar>
-              </td>
-              <td class="texto-bold">{{ u.nombre }} {{ u.apellido }}</td>
-              <td>&#64;{{ u.nombreUsuario }}</td>
-              <td>{{ u.correo }}</td>
-              <td>
-                <span class="badge-perfil" [class.admin]="u.perfil === 'administrador'">
-                  {{ u.perfil | uppercase }}
-                </span>
-              </td>
-              <td>
-                <span class="badge-estado" [class.deshabilitado]="u.habilitado === false">
-                  {{ u.habilitado !== false ? 'HABILITADO' : 'DESHABILITADO' }}
-                </span>
-              </td>
-              <td>
-                <app-button
-                  [variante]="u.habilitado !== false ? 'secondary' : 'primary'"
-                  [compacto]="true"
-                  [disabled]="procesandoId() === u._id || u._id === usuarioActualId"
-                  (onClick)="toggleEstadoUsuario(u)">
-                  @if (u.habilitado !== false) {
-                    <i class="fa-solid fa-ban" aria-hidden="true"></i> DESHABILITAR
-                  } @else {
-                    <i class="fa-solid fa-check" aria-hidden="true"></i> HABILITAR
-                  }
-                </app-button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+  <!-- Tabla Manga -->
+  <div class="contenedor-tabla-responsive">
+    <table class="tabla-manga">
+      <thead>
+        <tr>
+          <th>AVATAR</th>
+          <th>NOMBRE COMPLETO</th>
+          <th>USUARIO</th>
+          <th>CORREO</th>
+          <th>PERFIL</th>
+          <th>ESTADO</th>
+          <th>ACCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of usuarios(); track u._id) {
+        <tr>
+          <td>
+            <app-avatar [imagenUrl]="u.imagenPerfil" [nombre]="u.nombre" [apellido]="u.apellido"
+              [tamano]="42"></app-avatar>
+          </td>
+          <td class="texto-bold">{{ u.nombre }} {{ u.apellido }}</td>
+          <td>&#64;{{ u.nombreUsuario }}</td>
+          <td>{{ u.correo }}</td>
+          <td>
+            <span class="badge-perfil" [class.admin]="u.perfil === 'administrador'">
+              {{ u.perfil | uppercase }}
+            </span>
+          </td>
+          <td>
+            <span class="badge-estado" [class.deshabilitado]="u.habilitado === false">
+              {{ u.habilitado !== false ? 'HABILITADO' : 'DESHABILITADO' }}
+            </span>
+          </td>
+          <td>
+            <app-button [variante]="u.habilitado !== false ? 'secondary' : 'primary'" [compacto]="true"
+              [disabled]="procesandoId() === u._id || u._id === usuarioActualId" (onClick)="toggleEstadoUsuario(u)">
+              @if (u.habilitado !== false) {
+              <i class="fa-solid fa-ban" aria-hidden="true"></i> DESHABILITAR
+              } @else {
+              <i class="fa-solid fa-check" aria-hidden="true"></i> HABILITAR
+              }
+            </app-button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 
-    <!-- Paginación -->
-    <footer class="pie-paginacion-manga">
-      <span class="info-paginas">Mostrando {{ offset() + 1 }} - {{ offset() + usuarios().length }} de {{ total() }} usuarios</span>
-      <div class="botones-paginas">
-        <app-button variante="secondary" [disabled]="offset() === 0" (onClick)="paginaAnterior()">
-          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> ANTERIOR
-        </app-button>
-        <app-button variante="secondary" [disabled]="offset() + limit >= total()" (onClick)="paginaSiguiente()">
-          SIGUIENTE <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </app-button>
-      </div>
-    </footer>
+  <!-- Paginación -->
+  <footer class="pie-paginacion-manga">
+    <span class="info-paginas">Mostrando {{ offset() + 1 }} - {{ offset() + usuarios().length }} de {{ total() }}
+      usuarios</span>
+    <div class="botones-paginas">
+      <app-button variante="secondary" [disabled]="offset() === 0" (onClick)="paginaAnterior()">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> ANTERIOR
+      </app-button>
+      <app-button variante="secondary" [disabled]="offset() + limit >= total()" (onClick)="paginaSiguiente()">
+        SIGUIENTE <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </app-button>
+    </div>
+  </footer>
   }
 </div>
 
 <!-- Modal Modal de Alta de Usuario -->
 @if (mostrarModalAlta()) {
-  <div class="overlay-modal-manga">
-    <div class="panel-manga-modal">
-      <header class="header-modal">
-        <h2>CREAR NUEVO USUARIO</h2>
-        <button type="button" class="btn-cerrar" (click)="cerrarModalAlta()">
-          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-        </button>
-      </header>
+<div class="overlay-modal-manga">
+  <div class="panel-manga-modal">
+    <header class="header-modal">
+      <h2>CREAR NUEVO USUARIO</h2>
+      <button type="button" class="btn-cerrar" (click)="cerrarModalAlta()">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </header>
 
-      <form [formGroup]="formAlta" (ngSubmit)="guardarUsuario()" class="form-modal-body">
+    <form [formGroup]="formAlta" (ngSubmit)="guardarUsuario()" class="form-modal-body">
 
-        <!-- Selector Radio de Perfil -->
-        <div class="campo-radio-perfil">
-          <label class="label-radio">Perfil de Acceso:*</label>
-          <div class="opciones-radio">
-            <label><input type="radio" formControlName="perfil" value="usuario" /> Usuario Común</label>
-            <label><input type="radio" formControlName="perfil" value="administrador" /> Administrador</label>
-          </div>
+      <!-- Selector Radio de Perfil -->
+      <div class="campo-radio-perfil">
+        <label class="label-radio">Perfil de Acceso:*</label>
+        <div class="opciones-radio">
+          <label><input type="radio" formControlName="perfil" value="usuario" /> Usuario Común</label>
+          <label><input type="radio" formControlName="perfil" value="administrador" /> Administrador</label>
         </div>
+      </div>
 
-        <div class="grilla-dos">
-          <app-input label="Nombre" formControlName="nombre" [isInvalid]="esCampoInvalido('nombre')" [errorMessage]="obtenerMensajeError('nombre')"></app-input>
-          <app-input label="Apellido" formControlName="apellido" [isInvalid]="esCampoInvalido('apellido')" [errorMessage]="obtenerMensajeError('apellido')"></app-input>
-        </div>
+      <div class="grilla-dos">
+        <app-input label="Nombre" formControlName="nombre" [isInvalid]="esCampoInvalido('nombre')"
+          [errorMessage]="obtenerMensajeError('nombre')"></app-input>
+        <app-input label="Apellido" formControlName="apellido" [isInvalid]="esCampoInvalido('apellido')"
+          [errorMessage]="obtenerMensajeError('apellido')"></app-input>
+      </div>
 
-        <app-input label="Nombre de Usuario" formControlName="nombreUsuario" [isInvalid]="esCampoInvalido('nombreUsuario')" [errorMessage]="obtenerMensajeError('nombreUsuario')"></app-input>
-        <app-input label="Correo Electrónico" type="email" formControlName="correo" [isInvalid]="esCampoInvalido('correo')" [errorMessage]="obtenerMensajeError('correo')"></app-input>
+      <app-input label="Nombre de Usuario" formControlName="nombreUsuario"
+        [isInvalid]="esCampoInvalido('nombreUsuario')"
+        [errorMessage]="obtenerMensajeError('nombreUsuario')"></app-input>
+      <app-input label="Correo Electrónico" type="email" formControlName="correo"
+        [isInvalid]="esCampoInvalido('correo')" [errorMessage]="obtenerMensajeError('correo')"></app-input>
 
-        <div class="grilla-dos">
-          <app-input label="Contraseña" type="password" formControlName="password" [isInvalid]="esCampoInvalido('password')" [errorMessage]="obtenerMensajeError('password')"></app-input>
-          <app-input label="Repetir Contraseña" type="password" formControlName="repetirPassword" [isInvalid]="esCampoInvalido('repetirPassword')" [errorMessage]="obtenerMensajeError('repetirPassword')"></app-input>
-        </div>
+      <div class="grilla-dos">
+        <app-input label="Contraseña" type="password" formControlName="password"
+          [isInvalid]="esCampoInvalido('password')" [errorMessage]="obtenerMensajeError('password')"></app-input>
+        <app-input label="Repetir Contraseña" type="password" formControlName="repetirPassword"
+          [isInvalid]="esCampoInvalido('repetirPassword')"
+          [errorMessage]="obtenerMensajeError('repetirPassword')"></app-input>
+      </div>
 
-        <app-input label="Fecha de Nacimiento" type="date" formControlName="fechaNacimiento" [isInvalid]="esCampoInvalido('fechaNacimiento')" [errorMessage]="obtenerMensajeError('fechaNacimiento')"></app-input>
+      <app-input label="Fecha de Nacimiento" type="date" formControlName="fechaNacimiento"
+        [isInvalid]="esCampoInvalido('fechaNacimiento')"
+        [errorMessage]="obtenerMensajeError('fechaNacimiento')"></app-input>
 
-        <!-- Selector de Foto -->
-        <div class="campo-foto-modal">
-          <label for="fotoInputModal" class="btn-foto-modal">
-            <i class="fa-solid fa-camera" aria-hidden="true"></i> Cargar Foto (Opcional)
-          </label>
-          <input id="fotoInputModal" type="file" (change)="alSeleccionarFoto($event)" accept="image/*" class="input-file-oculto" />
-          @if (vistaPreviaFoto()) {
-            <span class="preview-check">
-              <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Imagen seleccionada
-            </span>
-          }
-        </div>
+      <app-input label="Descripción (obligatorio)" formControlName="descripcion"
+        [isInvalid]="esCampoInvalido('descripcion')" [errorMessage]="obtenerMensajeError('descripcion')">
+      </app-input>
+      <!-- Selector de Foto -->
+      <div class="campo-foto-modal">
+        <label for="fotoInputModal" class="btn-foto-modal">
+          <i class="fa-solid fa-camera" aria-hidden="true"></i> Cargar Foto (Opcional)
+        </label>
+        <input id="fotoInputModal" type="file" (change)="alSeleccionarFoto($event)" accept="image/*"
+          class="input-file-oculto" />
+        @if (vistaPreviaFoto()) {
+        <span class="preview-check">
+          <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Imagen seleccionada
+        </span>
+        }
+      </div>
 
-        <div class="acciones-modal">
-          <app-button type="button" variant="secundario" (onClick)="cerrarModalAlta()">CANCELAR</app-button>
-          <app-button type="submit" variant="primario" [disabled]="formAlta.invalid || enviandoAlta()">
-            {{ enviandoAlta() ? 'CREANDO...' : '¡GUARDAR USUARIO!' }}
-          </app-button>
-        </div>
-      </form>
-    </div>
+      <div class="acciones-modal">
+        <app-button type="button" variant="secundario" (onClick)="cerrarModalAlta()">CANCELAR</app-button>
+        <app-button type="submit" variant="primario" [disabled]="formAlta.invalid || enviandoAlta()">
+          {{ enviandoAlta() ? 'CREANDO...' : '¡GUARDAR USUARIO!' }}
+        </app-button>
+      </div>
+    </form>
   </div>
+</div>
 }

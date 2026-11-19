@@ -86,11 +86,9 @@ export class AuthService {
     }
 
     let imagenPerfil = '';
-    let imagenPerfilPublicId = '';
     if (file) {
       const imagen = await this.cloudinaryService.subirImagen(file, 'usuarios');
       imagenPerfil = imagen.url;
-      imagenPerfilPublicId = imagen.publicId;
     }
 
     const hashedPassword = await bcrypt.hash(dto.password!, 10);

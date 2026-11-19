@@ -46,6 +46,7 @@ export class ListaComentariosComponent implements OnInit {
       next: (res) => {
         this.comentarios.set(res.items);
         this.total.set(res.total);
+        this.cambioTotalComentarios.emit(res.total);
         this.cargando.set(false);
       },
       error: (err) => {
